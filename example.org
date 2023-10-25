@@ -1,0 +1,138 @@
+#+LANGUAGE: en
+#+TITLE: Article title
+
+* Heading
+
+[2025-03-21 Пт]
+
+Text text text text text text text. Text *bold bold* text text text text text. Text text text /italic italic/ text text. Text text text text +strike through+ text text. Text _underline underline_ text text text text text. Text =3429e299-ff7e-4861-974c-3cc3f4ea0054= text text text text text text. Text text text text [2024-06-23 Вс] text text text. Text text text text [[https://www.google.com/][hyperlink]] text text.
+
+** Lists
+:PROPERTIES:
+:CUSTOM_ID: lists
+:END:
+
+Text text text text text text. Text text text text text text. Text text text text text text. Text text text text text text. Text text text text text text. Text text text text text text. Text text text text text text. Text text text text text text. Text text text text text text.
+
+Text text text text text text text text:
+- unordered list item text
+- unordered list item text text text text text text text text text text text text text text text text text text text text text text text text text text text text
+- unordered list item
+
+Text text text text text text. Text text text text text text. Text text text text text text. Text text text text text text:
++ unordered list item text text text text text text text text text
++ unordered list item text text text
++ unordered list item text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text
+
+Text text text text text text. Text text text text text text. Text text text text text text:
+1. ordered list item text text text text text text text text text text text text text text text text text text text text text text
+2. ordered list item
+3. ordered list item
+
+** Quotes, verse and source code
+:PROPERTIES:
+:CUSTOM_ID: quote-verse-code
+:END:
+
+Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text.
+
+#+begin_quote
+text text text text text. text text text text text. text text text text text. text text text text text. text text text text text. text text text text text. text text text text text. text text text text text.
+#+end_quote
+
+Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text.
+
+#+begin_verse
+verse verse verse,
+verse verse verse,
+verse verse,
+verse verse verse
+
+Author Author
+#+end_verse
+
+Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text.
+
+#+begin_center
+Centered centered centered centered centered.
+#+end_center
+
+Text text text text text text text text. Text text text text text text text text. Text text text text text text text text.
+
+#+begin_src json
+{
+  "property1": 117312,
+  "property2": "text",
+  "property3": true,
+  "property4": ["one", "two", "three"]
+}
+#+end_src
+
+Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text.
+
+#+begin_src conf
+; comment declared
+; sections defined with multiple values
+[Section-name]
+key=value
+
+; sections defined with multiple values
+option1=true # in-line comments
+option1=false
+#+end_src
+
+Text text text text text text text. Text text text text text. Text text text text. Text text text text text text text text. Text text text text text text. Text text text text text text.
+
+#+begin_example
+preformatted text that is not highlighted
+preformatted text that is not highlighted
+preformatted text that is not highlighted
+preformatted text that is not highlighted
+#+end_example
+
+** Tables
+:PROPERTIES:
+:CUSTOM_ID: tables
+:END:
+
+Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text.
+
+#+CAPTION: Terms description
+| Column 1  | Column 2                                                                                         |
+|-----------+--------------------------------------------------------------------------------------------------|
+| Term      | description description description description                                                  |
+| Term      | description description description                                                              |
+| Term term | description description description description description  description description description |
+|-----------+--------------------------------------------------------------------------------------------------|
+
+Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text.
+
+#+CAPTION: Numbers array
+| One    | Two | Three | Four |
+|--------+-----+-------+------|
+| first  |   2 |     3 |    4 |
+| second |   2 |     3 |    4 |
+| third  |   2 |     3 |    4 |
+| fourth |   2 |     3 |    4 |
+
+Text text text.
+
+** Images
+:PROPERTIES:
+:CUSTOM_ID: images
+:END:
+
+Text text text text text text. Text text text text text. Text text text text text text. Text text text text text. Text  text text text. Text text text text text. Text text text text text text. Text text text text.
+
+#+ATTR_HTML: :width 320px
+#+CAPTION: Beautiful OrgMode Logo
+[[./img/logo.png]]
+
+Text text text text. Text text text text. Text text text text.
+
+* Final
+:PROPERTIES:
+:CUSTOM_ID: final
+:END:
+
+Text text text text. Text text text text. Text text text text. Text text text text. Text text text text.Text text text text.

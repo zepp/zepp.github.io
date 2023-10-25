@@ -1,0 +1,36 @@
+{
+  "name": "pages.zeppa.xyz",
+  "version": "1.0.0",
+  "description": "My articles and notes",
+  "main": "src/org-helper.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc",
+    "build": "webpack --mode=production",
+    "build-debug": "webpack --mode=development --watch",
+    "serve": "webpack serve --mode=development"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zepp/zepp.github.io.git"
+  },
+  "author": "Pavel Sokolov",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "css-loader": "^6.10.0",
+    "mini-css-extract-plugin": "^2.9.1",
+    "sass": "^1.77.8",
+    "sass-embedded": "^1.77.8",
+    "sass-loader": "^16.0.1",
+    "style-loader": "^3.3.4",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.4.4",
+    "typescript-language-server": "^4.3.3",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.2.0"
+  },
+  "dependencies": {
+    "highlight.js": "^11.9.0"
+  }
+}
