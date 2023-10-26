@@ -178,6 +178,17 @@ textarea { overflow-x: auto; }
 .org-info-js_search-highlight
 { background-color: #ffff00; color: #000000; font-weight: bold; }
 .org-svg { width: 90%; }
+code {
+    background: border-box #eee;
+    font-family: serif;
+    font-weight: normal;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+blockquote {
+    background: border-box #eee;
+    padding: 0.5em;
+}
 
 body {
     max-width: 60em;
