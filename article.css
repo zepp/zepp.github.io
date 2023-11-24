@@ -10,6 +10,7 @@
 .tag    { background-color: #eee; font-family: monospace;
           padding: 2px; font-size: 80%; font-weight: normal; }
 .timestamp { color: #bebebe; }
+.timestamp-wrapper { white-space: nowrap; }
 .timestamp-kwd { color: #5f9ea0; }
 .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
 .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
