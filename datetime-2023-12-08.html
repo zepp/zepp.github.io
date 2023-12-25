@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ru" xml:lang="ru">
 <head>
-<!-- 2023-12-08 Пт 14:12 -->
+<!-- 2023-12-25 Пн 21:29 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Работа с датой и временем при разработке под Android <span class="timestamp-wrapper"><span class="timestamp">&lt;Пт 08 дек 2023&gt;</span></span></title>
@@ -67,24 +67,15 @@ for the JavaScript code in this tag.
 <div id="content">
 <h1 class="title">Работа с датой и временем при разработке под Android <span class="timestamp-wrapper"><span class="timestamp">&lt;Пт 08 дек 2023&gt;</span></span></h1>
 <p>
-В данной статье хотелось бы подробно рассмотреть, как работать с датой и временем при разработке приложений под Android. Статья актуальна для тех случаев, когда система в целом рассчитана на работу в разных часовых поясах и события, соответственно, могут происходить в разных географических регионах. Сразу оговорюсь, что в статье не рассматриваются тонкости чем <code>GMT</code> отличается от <code>UTC</code> или почему год не всегда содержит одинаковое количество секунд.
+В данной статье хотелось бы подробно рассмотреть, как работать с датой и временем при разработке приложений под Android. Статья будет полезна в первую очередь для мобильных разработчиков, но и, в некоторой степени, для начинающих backend-разработчиков. Всё написанное ниже актуально для тех случаев, когда система в целом рассчитана на работу в разных часовых поясах и события, соответственно, могут происходить в разных географических регионах. Это подразумевает, что в приложение реализованы сценарии, где осуществляется фиксация времени события, ввод даты и времени или просто есть сущности, обладающие такими атрибутами, как время создания и модификации. Сразу оговорюсь, что в статье не рассматриваются тонкости чем <code>GMT</code> отличается от <code>UTC</code>, или почему год не всегда содержит одинаковое количество секунд.
 </p>
 
 <p>
-В начале разработки, как правило, для работы с датой и временем берут самое простое, что доступно по умолчанию. Это классы <a href="https://developer.android.com/reference/java/util/Date">Date</a> и <a href="https://developer.android.com/reference/android/icu/util/Calendar">Calendar</a>. Класс <code>Date</code> хранит время с точностью до миллисекунды и пытается решать сразу множество задач, связанных с представлением даты и времени. Часть его методов на данный момент помечено как <code>Deprecated</code>, что намекает на то, что получилось это не очень хорошо. Вероятно, так вышло в виду того, что время, как некоторая линейная величина, и местное время это немного разные, хотя всё же связанные вещи. В <code>Java 8</code> эти классы были заменены на более продуманную реализацию <code>JSR-310 API</code>, о которой и пойдёт речь.
+В начале разработки, как правило, для работы с датой и временем берут самое простое, что доступно по умолчанию. Это классы <a href="https://developer.android.com/reference/java/util/Date">Date</a> и <a href="https://developer.android.com/reference/android/icu/util/Calendar">Calendar</a>. Класс <code>Date</code> хранит время с точностью до миллисекунды и пытается решать сразу множество задач, связанных с представлением даты и времени. Часть его методов на данный момент помечена как <code>Deprecated</code>, что намекает на то, что получилось это не очень хорошо. Вероятно, так вышло в виду того, что время, как некоторая линейная величина, и местное время это немного разные, хотя всё же связанные вещи. В Java 8 эти классы были заменены на более продуманную реализацию <code>JSR-310 API</code>, о которой и пойдёт речь.
 </p>
 
 <p>
-У реализации есть некоторые ограничения о чём прямо сказано в документации:
-</p>
-<blockquote>
-<p>
-Implementations of the Java time-scale using the JSR-310 API are not required to provide any clock that is sub-second accurate, or that progresses monotonically or smoothly. Implementations are therefore not required to actually perform the UTC-SLS slew or to otherwise be aware of leap seconds.
-</p>
-</blockquote>
-
-<p>
-По скольку новая реализация стала доступна только начиная с версии 26 <code>Android SDK</code>, то для написания приложений, которые поддерживают устройства работающие на более ранних версиях <code>SDK</code>, лучше использовать бэкпорт <a href="https://github.com/JakeWharton/ThreeTenABP">ThreeTenABP</a>. Для того чтобы подключить библиотеку к проекту необходимо добавить в <code>build.gradle</code>:
+Поскольку новая реализация стала доступна только начиная с версии 26 <code>Android SDK</code>, то для написания приложений, которые поддерживают устройства работающие на более ранних версиях <code>SDK</code>, лучше использовать бэкпорт <a href="https://github.com/JakeWharton/ThreeTenABP">ThreeTenABP</a>. Для того чтобы подключить библиотеку к проекту, необходимо добавить в <code>build.gradle</code>:
 </p>
 
 <div class="org-src-container">
@@ -104,15 +95,15 @@ Implementations of the Java time-scale using the JSR-310 API are not required to
 </pre>
 </div>
 
-<div id="outline-container-org3e75b0e" class="outline-2">
-<h2 id="org3e75b0e">Универсальное время</h2>
-<div class="outline-text-2" id="text-org3e75b0e">
+<div id="outline-container-org1cad4a6" class="outline-2">
+<h2 id="org1cad4a6">Универсальное время</h2>
+<div class="outline-text-2" id="text-org1cad4a6">
 <p>
-Если рассматривать время как некоторую линейную величину, то есть число секунд отсчитанных от какой-то условной начальной точки, то для описания этой величины подойдёт класс <a href="https://developer.android.com/reference/java/time/Instant">Instant</a>. Время в данном понимание не связано с временем суток или географическим местоположением. Этот класс описывает некоторый момент, который имеет одинаковое значение для любой точки на планете.
+Если рассматривать время как некоторую условно линейную величину (без учёта високосных секунд), то есть число секунд отсчитанных от какой-то определённой начальной точки, то для описания этой величины подойдёт класс <a href="https://developer.android.com/reference/java/time/Instant">Instant</a>. Время в данном понимание не связано с временем суток или географическим местоположением. Этот класс описывает некоторый момент, который имеет одинаковое значение для любой точки на планете.
 </p>
 
 <p>
-Фактически данный класс хранит два значения, которые определяют сколько времени прошло с <code>00:00 01.01.1970 UTC</code> в наносекундах:
+Фактически данный класс хранит два значения, которые определяют, сколько времени прошло с <code>00:00 01.01.1970 UTC</code> (этот момент называется <code>Unix Epoch</code>, более подробно см. в статье про <a href="https://ru.wikipedia.org/wiki/Unix-%D0%B2%D1%80%D0%B5%D0%BC%D1%8F">Unix-время</a>) в наносекундах. Класс позволяет хранить время с данной точностью, но не предполагает, что она обеспечена в исходных данных. В Java 8 для получения текущего времени, в конечном итоге, будет использоваться функция <code>System.currentTimeMillis()</code>, поэтому ожидать наносекундой точности вообще не стоит.
 </p>
 
 <div class="org-src-container">
@@ -129,22 +120,58 @@ private final int nanos;
 </div>
 
 <p>
-Интерфейс класса сделан так, что это выглядит единым значением. Методы класса позволяют прибавлять и отнимать от этого виртуального значения произвольное количество секунд, миллисекунд или наносекунд или сравнивать два объекта данного класса (класс реализует интерфейс <code>Comparable</code>). Есть и ряд других методов, но основной упор делается на работу с объектом класса как с некоторой скалярной величиной.
+Интерфейс класса сделан таким образом, что это выглядит единым значением. Методы класса позволяют прибавлять и отнимать от этого виртуального значения произвольное количество секунд, миллисекунд или наносекунд, или сравнивать два объекта данного класса (класс реализует интерфейс <code>Comparable</code>, поэтому в Kotlin объекты класса можно легко сравнивать, используя оператор сравнения). Есть и ряд других методов, но основной упор делается на работу с объектом класса как с некоторой скалярной величиной.
 </p>
 
 <p>
-Используя доступные методы класса, можно легко преобразовать значение в миллисекунды и сохранить в <code>БД</code> с потерей точности:
+Некоторые специфичные для этого класса методы, которые будут использоваться далее:
 </p>
-<div class="org-src-container">
-<pre class="src src-kotlin">object Converters {
-  @TypeConverter
-  fun instantFromMillis(value: Long?) = value?.let { Instant.ofEpochMilli(it) }
 
-  @TypeConverter
-  fun instantToMillis(instant: Instant?) = instant?.toEpochMilli()
-}
-</pre>
-</div>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left"><code>now ()</code></td>
+<td class="org-left">статический метод, возвращающий объект соответствующий текущему моменту</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>toEpochMilli ()</code></td>
+<td class="org-left">возвращает количество миллисекунд с момента <code>Unix Epoch</code></td>
+</tr>
+
+<tr>
+<td class="org-left"><code>ofEpochMilli (long epochMilli)</code></td>
+<td class="org-left">статический метод, создающий объект из количества миллисекунд с момента <code>Unix Epoch</code></td>
+</tr>
+
+<tr>
+<td class="org-left"><code>plusMillis (long millisToAdd)</code></td>
+<td class="org-left">прибавляет к текущему значению указанное количество миллисекунд</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>getEpochSecond ()</code></td>
+<td class="org-left">возвращает количество секунд с момента <code>Unix Epoch</code></td>
+</tr>
+
+<tr>
+<td class="org-left"><code>ofEpochSecond (long epochSecond)</code></td>
+<td class="org-left">статический метод, создающий объект из количества секунд с момента <code>Unix Epoch</code></td>
+</tr>
+
+<tr>
+<td class="org-left"><code>plusSeconds (long secondsToAdd)</code></td>
+<td class="org-left">прибавляет к текущему значению указанное количество секунд</td>
+</tr>
+</tbody>
+</table>
 
 <p>
 Если создать объект класса и преобразовать его в строку явным или неявным образом, то получится примерно следующее значение:
@@ -152,20 +179,24 @@ private final int nanos;
 
 <pre class="example">
 &gt;&gt;&gt; import java.time.Instant
-&gt;&gt;&gt; Instant.now()
-Instant.now()
-res1: java.time.Instant = 2023-12-08T09:34:02.987Z
+&gt;&gt;&gt;
+&gt;&gt;&gt; val now = Instant.now()
+&gt;&gt;&gt; now
+res3: java.time.Instant = 2023-12-20T13:01:51.203Z
+&gt;&gt;&gt;
+&gt;&gt;&gt; now.toEpochMilli()
+res5: kotlin.Long = 1703077311203
 </pre>
 
 <p>
-Это дата и время в формате <a href="https://ru.wikipedia.org/wiki/ISO_8601">ISO 8601</a>. Выведенное значение в <code>UTC</code>, на что намекает буква <code>Z</code> в конце (нулевое смещение часового пояса).
+<code>2023-12-20T13:01:51.203Z</code> - это дата и время в формате <a href="https://ru.wikipedia.org/wiki/ISO_8601">ISO 8601</a>. Значение выводится в <code>UTC</code>, на что намекает буква <code>Z</code> в конце (нулевое смещение часового пояса).
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgf479ad0" class="outline-2">
-<h2 id="orgf479ad0">Местное время, дата и часовые пояса</h2>
-<div class="outline-text-2" id="text-orgf479ad0">
+<div id="outline-container-orgf58cbb7" class="outline-2">
+<h2 id="orgf58cbb7">Местное время, дата и часовые пояса</h2>
+<div class="outline-text-2" id="text-orgf58cbb7">
 <p>
 Для описания местного времени есть класс <a href="https://developer.android.com/reference/kotlin/java/time/LocalTime">LocalTime</a>, который буквально хранит часы, минуты и секунды:
 </p>
@@ -215,42 +246,12 @@ private final short day;
 </p>
 
 <p>
-Данные классы подойдут для описания времени и дат из документов или для представления данных на <code>UI</code>. Они никак <i>не привязаны</i> к часовому поясу. Тут мы переходим к концепции часовых поясов, которая появилась относительно недавно. Зародилась она в Великобритании в середине <code>XIX</code> века и в начале использовалась расчётной палатой и железнодорожными компаниями. Суть заключается в том, что ориентироваться на световой день в каждом отдельном городе нет смысла и необходимо выбрать некоторую общую точку отсчёта. Этой точкой стал гринвичский меридиан, а среднее время по Гринвичу это почти тоже самое, что и <code>UTC</code>. Часовой пояс это то, что связывается универсальное время <code>UTC</code> и местное время. Казалось бы всё просто: добавляем к <code>UTC</code> некоторое значение и получаем местное время, но концепция часовых поясов несколько сложней, так как ещё существует зимнее и летнее время.
+Данные классы подойдут для описания времени и дат из документов или для представления данных на <code>UI</code>. Они никак <i>не привязаны</i> к часовому поясу. Тут мы переходим к концепции часовых поясов, которая появилась относительно недавно. Зародилась она в Великобритании в середине <code>XIX</code> века и вначале использовалась расчётной палатой и железнодорожными компаниями. Суть заключается в том, что ориентироваться на световой день в каждом отдельном городе нет смысла и необходимо выбрать некоторую общую точку отсчёта. Этой точкой стал гринвичский меридиан, а среднее время по Гринвичу это почти то же самое, что и <code>UTC</code>. Часовой пояс это то, что связывает универсальное время <code>UTC</code> и местное время. Казалось бы всё просто: добавляем к <code>UTC</code> некоторое значение и получаем местное время, но концепция часовых поясов несколько сложней, так как ещё существует зимнее и летнее время.
 </p>
 
 <p>
 Для описания часового пояса существует несколько классов: <a href="https://developer.android.com/reference/kotlin/java/time/ZoneOffset">ZoneOffset</a> и <a href="https://developer.android.com/reference/java/time/ZoneId">ZoneId</a>. Первый описывает просто фиксированное смещение, а последний позволяет учитывать переходы на летнее и зимнее время. Можно сказать, что <code>ZoneId</code> содержит список правил, которые, в зависимости от времени года, ссылаются на соответствующий <code>ZoneOffset</code>. Оба класса содержат статические методы, которые позволяют создавать объекты класса из текстового описания. Смещение выглядит вот так <code>+03:00</code>, а часовой пояс вот так <code>Europe/Moscow</code> или вот так <code>UTC+03:00</code>.
 </p>
-
-<p>
-Если надо сохранить <code>ZoneOffset</code> в <code>БД</code>:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-kotlin">object Converters {
-  @TypeConverter
-  fun offsetToSeconds(offset: ZoneOffset?) = offset?.totalSeconds
-
-  @TypeConverter
-  fun secondsToOffset(value: Int?) = value?.let { ZoneOffset.ofTotalSeconds(it) }
-}
-</pre>
-</div>
-
-<p>
-Если есть необходимость сохранить <code>LocalDateTime</code> в <code>БД</code>, то это можно сделать, например, вот таким образом (с потерей точности):
-</p>
-
-<div class="org-src-container">
-<pre class="src src-kotlin">object Converters {
-  @TypeConverter
-  fun secondsToLocalDateTime(value: Long?) = value?.let { LocalDateTime.ofEpochSecond(it, 0, ZoneOffset.UTC) }
-
-  @TypeConverter
-  fun localDateTimeToSeconds(date: LocalDateTime?) = date?.toEpochSecond(ZoneOffset.UTC)
-}
-</pre>
-</div>
 
 <p>
 Если связать <code>LocalDateTime</code> с <code>ZoneOffset</code> то получится <a href="https://developer.android.com/reference/java/time/OffsetDateTime">OffsetDateTime</a>, а если с <code>ZoneId</code> то <a href="https://developer.android.com/reference/kotlin/java/time/ZonedDateTime">ZonedDateTime</a>. Можно заглянуть в код, где оба этих класса, <code>OffsetDateTime</code> и <code>ZonedDateTime</code>, агрегируют <code>LocalDateTime</code> и <code>ZoneOffset</code>, в последнем случае ещё добавляется непосредственно <code>ZoneId</code>, и реализуют ряд интерфейсов, чтобы с ними могли работать другие классы из пакета <code>java.time</code>.
@@ -264,18 +265,18 @@ private final short day;
 &gt;&gt;&gt; val zoneId = ZoneId.of("Europe/Moscow")
 &gt;&gt;&gt; val now = LocalDateTime.now()
 &gt;&gt;&gt; now
-res6: java.time.LocalDateTime = 2023-12-08T12:37:12.761
+res6: java.time.LocalDateTime = 2023-12-20T16:03:12.972
 &gt;&gt;&gt;
 &gt;&gt;&gt; now.atZone(zoneId)
-res8: java.time.ZonedDateTime = 2023-12-08T12:37:12.761+03:00[Europe/Moscow]
+res8: java.time.ZonedDateTime = 2023-12-20T16:03:12.972+03:00[Europe/Moscow]
 &gt;&gt;&gt;
 &gt;&gt;&gt; val offset = ZoneOffset.of("+03:00")
 &gt;&gt;&gt; now.atOffset(offset)
-res11: java.time.OffsetDateTime = 2023-12-08T12:37:12.761+03:00
+res11: java.time.OffsetDateTime = 2023-12-20T16:03:12.972+03:00
 </pre>
 
 <p>
-В принципе создать объекты <code>OffsetDateTime</code> и <code>ZonedDateTime</code> можно не только из <code>LocalDateTime</code>, но и из <code>Instant</code> тоже. Сделать это можно следующим образом:
+В принципе, создать объекты <code>OffsetDateTime</code> и <code>ZonedDateTime</code> можно не только из <code>LocalDateTime</code>, но и из <code>Instant</code> тоже. Сделать это можно следующим образом:
 </p>
 
 <pre class="example">
@@ -285,15 +286,15 @@ res11: java.time.OffsetDateTime = 2023-12-08T12:37:12.761+03:00
 &gt;&gt;&gt;
 &gt;&gt;&gt; val now = Instant.now()
 &gt;&gt;&gt; now
-res5: java.time.Instant = 2023-12-08T09:39:09.694Z
+res5: java.time.Instant = 2023-12-20T13:04:20.812Z
 &gt;&gt;&gt;
 &gt;&gt;&gt; val zoneId = ZoneId.of("Europe/Moscow")
 &gt;&gt;&gt; now.atZone(zoneId)
-res8: java.time.ZonedDateTime = 2023-12-08T12:39:09.694+03:00[Europe/Moscow]
+res9: java.time.ZonedDateTime = 2023-12-20T16:04:20.812+03:00[Europe/Moscow]
 &gt;&gt;&gt;
 &gt;&gt;&gt; val offset = ZoneOffset.of("+03:00")
 &gt;&gt;&gt; now.atOffset(offset)
-res11: java.time.OffsetDateTime = 2023-12-08T12:39:09.694+03:00
+res12: java.time.OffsetDateTime = 2023-12-20T16:04:20.812+03:00
 </pre>
 
 <p>
@@ -301,7 +302,317 @@ res11: java.time.OffsetDateTime = 2023-12-08T12:39:09.694+03:00
 </p>
 
 <p>
-Пример того, как учитывается переход на зимнее время:
+Полезные методы общие для обоих классов:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left"><code>now()</code></td>
+<td class="org-left">статический метод, возвращающий объект соответствующий текущему моменту</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>ofInstant (Instant instant, ZoneId zone)</code></td>
+<td class="org-left">статический метод, возвращающий объект из времени <code>UTC</code> и часового пояса</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>toInstant ()</code></td>
+<td class="org-left">возвращает момент, то есть <code>Instant</code></td>
+</tr>
+
+<tr>
+<td class="org-left"><code>toLocalDate ()</code></td>
+<td class="org-left">возвращает дату</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>toLocalTime ()</code></td>
+<td class="org-left">возвращает местное время</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>toLocalDateTime ()</code></td>
+<td class="org-left">возвращает дату и местное время</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>getYear ()</code></td>
+<td class="org-left">возвращает год</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>getMonth ()</code></td>
+<td class="org-left">возвращает месяц</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>getDayOfMonth ()</code></td>
+<td class="org-left">возвращает день месяца</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>getHour ()</code></td>
+<td class="org-left">возвращает количество часов</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>getMinute ()</code></td>
+<td class="org-left">возвращает количество минут</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-org76d7695" class="outline-2">
+<h2 id="org76d7695">Модификаторы</h2>
+<div class="outline-text-2" id="text-org76d7695">
+<p>
+Вышеперечисленные классы реализуют интерфейсы <a href="https://developer.android.com/reference/java/time/temporal/Temporal">Temporal</a> и <a href="https://developer.android.com/reference/java/time/temporal/TemporalAdjuster">TemporalAdjuster</a> (не во всех случаях), которые, в свою очередь, содержат методы, позволяющие модифицировать объект. Эти методы имеют максимально обобщённый вид (отдельным параметром надо указывать в каких единицах измеряется аргумент), и поэтому их не всегда удобно использовать. Помимо этих методов есть более простые и удобные методы, которые позволяют менять отдельные календарные или временные величины и они принимают всего один аргумент. Эти методы не наследуются от какого-то базового класса или интерфейса, а просто имеют одинаковые названия. Все эти методы возвращают изменённую копию объекта, что позволяет сразу передать объект в другой метод или применить следующий модификатор.
+</p>
+
+<p>
+Вот сигнатуры некоторых методов из вышеупомянутых интерфейсов:
+</p>
+<div class="org-src-container">
+<pre class="src src-java">public int get (TemporalField field);
+
+public abstract Temporal adjustInto (Temporal temporal);
+
+public abstract Temporal with (TemporalField field, long newValue);
+
+public Temporal with (TemporalAdjuster adjuster);
+
+public Temporal plus (TemporalAmount amount);
+
+public abstract Temporal plus (long amountToAdd, TemporalUnit unit);
+
+public abstract long until (Temporal endExclusive, TemporalUnit unit);
+</pre>
+</div>
+
+<p>
+Методы <code>adjustInto</code> и <code>with</code> по сути выполняют одну и ту же функцию - модифицируют копию объекта в соответствии с некоторыми правилами или на основании данных из другого объекта. Рекомендуется использовать последний, потому что так код выглядит понятней.
+</p>
+
+<p>
+Помимо этого есть класс <a href="https://developer.android.com/reference/java/time/temporal/TemporalAdjusters">TemporalAdjusters</a>, который предоставляет правила (они тоже реализуют интерфейс <code>TemporalAdjuster</code>), модифицирующие объект определённым образом. Вот некоторые из них:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left"><code>firstDayOfMonth ()</code></td>
+<td class="org-left">выбирает первый день месяца</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>firstDayOfNextMonth()</code></td>
+<td class="org-left">выбирает первый день следующего месяца</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>firstInMonth(DayOfWeek dayOfWeek)</code></td>
+<td class="org-left">выбирает первый день недели в месяце</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>lastDayOfMonth ()</code></td>
+<td class="org-left">выбирает последний день месяца</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>lastInMonth(DayOfWeek dayOfWeek)</code></td>
+<td class="org-left">выбирает последний день недели в месяце</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>next(DayOfWeek dayOfWeek)</code></td>
+<td class="org-left">выбирает следующий день недели в месяце</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>previous(DayOfWeek dayOfWeek)</code></td>
+<td class="org-left">выбирает предыдущий день недели в месяце</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Вот пример того, как это работает:
+</p>
+
+<pre class="example">
+&gt;&gt;&gt; import java.time.OffsetDateTime
+&gt;&gt;&gt; import java.time.temporal.TemporalAdjusters
+&gt;&gt;&gt; import java.time.LocalTime
+&gt;&gt;&gt; import java.time.DayOfWeek
+&gt;&gt;&gt;
+&gt;&gt;&gt; val now = OffsetDateTime.now()
+&gt;&gt;&gt; now
+res7: java.time.OffsetDateTime = 2023-12-20T16:05:54.733+03:00
+&gt;&gt;&gt;
+&gt;&gt;&gt; now.with(TemporalAdjusters.lastDayOfMonth())
+res9: java.time.OffsetDateTime = 2023-12-31T16:05:54.733+03:00
+&gt;&gt;&gt;
+&gt;&gt;&gt; now.with(LocalTime.of(0, 0))
+res11: java.time.OffsetDateTime = 2023-12-20T00:00+03:00
+&gt;&gt;&gt;
+&gt;&gt;&gt; TemporalAdjusters.next(DayOfWeek.MONDAY).adjustInto(now)
+res13: java.time.temporal.Temporal = 2023-12-25T16:05:54.733+03:00
+</pre>
+
+<p>
+Методы, принимающие один аргумент:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left"><code>withYear (int year)</code></td>
+<td class="org-left">меняет год</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>withMonth (int month)</code></td>
+<td class="org-left">меняет месяц</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>withDayOfMonth (int dayOfMonth)</code></td>
+<td class="org-left">меняет день месяца</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>withHour (int hour)</code></td>
+<td class="org-left">меняет час</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>withMinute (int minute)</code></td>
+<td class="org-left">меняет минуты</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>plusYears (long years)</code></td>
+<td class="org-left">увеличивает год</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>plusMonths (long months)</code></td>
+<td class="org-left">увеличивает месяц</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>plusHours (long hours)</code></td>
+<td class="org-left">увеличивает час</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>plusMinutes (long minutes)</code></td>
+<td class="org-left">увеличивает минуты</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>truncatedTo (TemporalUnit unit)</code></td>
+<td class="org-left">"округляет" по календарной или временной единице</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Методы специфичные для <code>OffsetDateTime</code> и <code>ZonedDateTime</code>:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left"><code>withOffsetSameInstant (ZoneOffset offset)</code></td>
+<td class="org-left">меняет смещение, но оставляет универсальное время прежним</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>withOffsetSameLocal (ZoneOffset offset)</code></td>
+<td class="org-left">меняет смещение, но оставляет местное время прежним</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>withZoneSameInstant (ZoneId zone)</code></td>
+<td class="org-left">меняет часовой пояс, но оставляет универсальное время прежним</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>withZoneSameLocal(ZoneId zone)</code></td>
+<td class="org-left">меняет часовой пояс, но оставляет местное время прежним</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Данные методы позволяют менять часовой пояс, но делают это разным образом. В первом случае не меняется универсальное время <code>UTC</code>, как следствие это будет новое местное время в новом часовом поясе. Во втором случае, наоборот, сохраняется местное время, а меняется универсальное время, чтобы компенсировать разницу при переходе в новый часовой пояс.
+</p>
+
+<p>
+И примеры их использования:
+</p>
+<pre class="example">
+&gt;&gt;&gt; import java.time.OffsetDateTime
+&gt;&gt;&gt; import java.time.ZoneOffset
+&gt;&gt;&gt; import java.time.temporal.ChronoUnit
+&gt;&gt;&gt;
+&gt;&gt;&gt; val now = OffsetDateTime.now()
+&gt;&gt;&gt; now
+res5: java.time.OffsetDateTime = 2023-12-20T16:07:08.819+03:00
+&gt;&gt;&gt;
+&gt;&gt;&gt; now.withMonth(1)
+res7: java.time.OffsetDateTime = 2023-01-20T16:07:08.819+03:00
+&gt;&gt;&gt;
+&gt;&gt;&gt; now.withHour(0).withMinute(0).withSecond(0)
+res9: java.time.OffsetDateTime = 2023-12-20T00:00:00.819+03:00
+&gt;&gt;&gt;
+&gt;&gt;&gt; now.truncatedTo(ChronoUnit.DAYS)
+res11: java.time.OffsetDateTime = 2023-12-20T00:00+03:00
+&gt;&gt;&gt;
+&gt;&gt;&gt; val offset = ZoneOffset.of("+04:00")
+&gt;&gt;&gt; now.withOffsetSameInstant(offset)
+res14: java.time.OffsetDateTime = 2023-12-20T17:07:08.819+04:00
+&gt;&gt;&gt;
+&gt;&gt;&gt; now.withOffsetSameLocal(offset)
+res16: java.time.OffsetDateTime = 2023-12-20T16:07:08.819+04:00
+</pre>
+
+<p>
+Пример того, как используя простейший модификатор и метод <code>atStartOfDay</code>, который преобразует дату в <code>ZonedDateTime</code> в определённом часовом поясе, можно продемонстрировать переход на зимнее время:
 </p>
 <pre class="example">
 &gt;&gt;&gt; import java.time.ZoneId
@@ -315,16 +626,12 @@ res4: java.time.ZonedDateTime = 2023-10-01T00:00+02:00[Europe/Berlin]
 &gt;&gt;&gt; date.plusMonths(1).atStartOfDay(zoneId)
 res6: java.time.ZonedDateTime = 2023-11-01T00:00+01:00[Europe/Berlin]
 </pre>
-
-<p>
-Сохранить в <code>БД</code> объекты классов <code>OffsetDateTime</code> и <code>ZonedDateTime</code> тоже можно, но для этого проще всего использовать форматирование в строку, о чём речь пойдёт в следующей главе.
-</p>
 </div>
 </div>
 
-<div id="outline-container-orgfa1cdc4" class="outline-2">
-<h2 id="orgfa1cdc4">Форматирование</h2>
-<div class="outline-text-2" id="text-orgfa1cdc4">
+<div id="outline-container-orgd3a970d" class="outline-2">
+<h2 id="orgd3a970d">Форматирование</h2>
+<div class="outline-text-2" id="text-orgd3a970d">
 <p>
 Любой из вышеперечисленных классов реализует интерфейс <code>TemporalAccessor</code>, поэтому его можно преобразовывать в удобочитаемую строку используя метод <code>format</code> класса <a href="https://developer.android.com/reference/java/time/format/DateTimeFormatter">DateTimeFormatter</a>. Если формат предполагает наличие данных, который данный класс не содержит, то будет кинуто исключение.
 </p>
@@ -338,7 +645,7 @@ res6: java.time.ZonedDateTime = 2023-11-01T00:00+01:00[Europe/Berlin]
 &gt;&gt;&gt;
 &gt;&gt;&gt; val formatter = DateTimeFormatter.ofPattern("HH:mm, dd MMMM yyyy")
 &gt;&gt;&gt; formatter.format(LocalDateTime.now())
-res3: kotlin.String = 12:40, 08 December 2023
+res4: kotlin.String = 16:09, 20 December 2023
 </pre>
 
 <p>
@@ -377,11 +684,11 @@ res3: kotlin.String = 12:40, 08 December 2023
 </table>
 
 <p>
-Последний, например, можно использовать для формирования значения <code>HTTP</code> хэдера <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Date">Date</a> или наоборот для его парсинга.
+Последний, например, можно использовать для формирования значения <code>HTTP</code> хэдера <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Date">Date</a> или, наоборот, для его парсинга.
 </p>
 
 <p>
-Помимо метода <code>format</code> у <code>DateTimeFormatter</code> есть метод <code>parse</code>, который позволяет парсить строки. Он возвращает некоторый объект, который реализует интерфейс <code>TemporalAccessor</code>, поэтому нужно дополнительное преобразование, чтобы создать объект нужного класса. Для того чтобы не делать это самому, можно использовать готовые методы классов <code>OffsetDateTime</code> и <code>ZonedDateTime</code>.
+Помимо метода <code>format</code>, у <code>DateTimeFormatter</code> есть метод <code>parse</code>, который позволяет парсить строки. Он возвращает некоторый объект, который реализует интерфейс <code>TemporalAccessor</code>, поэтому нужно дополнительное преобразование, чтобы создать объект нужного класса. Для того чтобы не делать это самому, можно использовать готовые методы классов <code>OffsetDateTime</code> и <code>ZonedDateTime</code>.
 </p>
 
 <pre class="example">
@@ -398,9 +705,119 @@ res5: java.time.OffsetDateTime = 2023-12-31T23:59:59.999+03:00
 &gt;&gt;&gt; OffsetDateTime.parse("2023-12-31T23:59:59.999+03:00")
 res7: java.time.OffsetDateTime = 2023-12-31T23:59:59.999+03:00
 </pre>
+</div>
+</div>
+
+<div id="outline-container-org93f084c" class="outline-2">
+<h2 id="org93f084c">Временной промежуток</h2>
+<div class="outline-text-2" id="text-org93f084c">
+<p>
+Помимо ситуаций, когда надо зафиксировать время какого-то события, есть ситуации, когда надо зафиксировать длительность некоторого процесса. Для этого есть специальный класс <a href="https://developer.android.com/reference/kotlin/java/time/Duration">Duration</a>, который позволяет описать длительность с точностью до наносекунды, как и <code>Instant</code>. У него есть ряд статических методов, которые позволяют создавать объекты класса из секунд, минут, часов и т.д. Также есть методы-модификаторы, которые позволяют прибавить, отнять определенное количество секунд, минут, часов или уменьшить, увеличить значение в определенное количество раз. Класс реализует интерфейс <code>TemporalAmount</code>, поэтому его можно передавать в качестве аргумента в методы-модификаторы других классов.
+</p>
 
 <p>
-Таким образом чтобы сохранить <code>OffsetDateTime</code> и <code>ZonedDateTime</code> в <code>БД</code> можно использовать следующий код:
+Пример метода, который позволяет создать объект класса, вычислив разницу между двумя <code>Instant</code>:
+</p>
+<div class="org-src-container">
+<pre class="src src-kotlin">fun Instant.diff(instant: Instant): Duration = Duration.ofNanos(until(instant, ChronoUnit.NANOS))
+</pre>
+</div>
+
+<p>
+Пример использования:
+</p>
+<pre class="example">
+&gt;&gt;&gt; import java.time.Instant
+&gt;&gt;&gt; import java.time.Duration
+&gt;&gt;&gt; import java.time.temporal.ChronoUnit
+&gt;&gt;&gt;
+&gt;&gt;&gt; val now = Instant.now()
+&gt;&gt;&gt; val tenHoursLater = now.plus(Duration.ofHours(1).multipliedBy(10))
+&gt;&gt;&gt; fun Instant.diff(instant: Instant): Duration = Duration.ofNanos(until(instant, ChronoUnit.NANOS))
+&gt;&gt;&gt; now.diff(tenHoursLater)
+res7: java.time.Duration = PT10H
+</pre>
+
+<p>
+Помимо <code>Duration</code> есть класс <a href="https://developer.android.com/reference/kotlin/java/time/Period">Period</a>, который хранит временной промежуток, но делает это через календарные величины - год, месяц и день. Используя информацию из предыдущих глав, можно посчитать количество дней в текущем месяце:
+</p>
+
+<pre class="example">
+&gt;&gt;&gt; import java.time.ZonedDateTime
+&gt;&gt;&gt; import java.time.temporal.TemporalAdjusters
+&gt;&gt;&gt; import java.time.temporal.ChronoUnit
+&gt;&gt;&gt; import java.time.Period
+&gt;&gt;&gt;
+&gt;&gt;&gt; val now = ZonedDateTime.now()
+&gt;&gt;&gt; now
+res6: java.time.ZonedDateTime = 2023-12-20T16:11:03.497+03:00[Europe/Moscow]
+&gt;&gt;&gt;
+&gt;&gt;&gt; val from = now.with(TemporalAdjusters.firstDayOfMonth())
+&gt;&gt;&gt; from
+res9: java.time.ZonedDateTime = 2023-12-01T16:11:03.497+03:00[Europe/Moscow]
+&gt;&gt;&gt;
+&gt;&gt;&gt; val to = now.with(TemporalAdjusters.firstDayOfNextMonth())
+&gt;&gt;&gt; to
+res12: java.time.ZonedDateTime = 2024-01-01T16:11:03.497+03:00[Europe/Moscow]
+&gt;&gt;&gt;
+&gt;&gt;&gt; val period = Period.ofDays(from.until(to, ChronoUnit.DAYS).toInt())
+&gt;&gt;&gt; period
+res15: java.time.Period = P31D
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org2c88dd4" class="outline-2">
+<h2 id="org2c88dd4">Хранение</h2>
+<div class="outline-text-2" id="text-org2c88dd4">
+<p>
+В данной главе речь пойдёт о том, как сохранить объекты вышеперечисленных классов в <code>Room</code>, самую распространённую реализации <code>БД</code> для <code>Android</code>. Как сохранять сложные типы данных в <code>Room</code> подробно описано вот этой <a href="https://developer.android.com/training/data-storage/room/referencing-data">статье</a>. Если кратко, то необходимо через аннотацию <code>@TypeConverters</code> у класса, описывающего <code>БД</code>, указать другой класс, где хранятся методы выполняющие преобразование сложных типов данных в более примитивные.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-kotlin">object Converters {
+}
+
+@Database(entities = [Event::class])
+@TypeConverters(Converters::class)
+abstract class AppDatabase : RoomDatabase() {
+  abstract fun eventDao(): EventDao
+}
+</pre>
+</div>
+
+<p>
+<code>Instant</code>, с учётом его точности в Java 8, проще всего преобразовать в миллисекунды и сохранить в виде целочисленного значения:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-kotlin">object Converters {
+  @TypeConverter
+  fun instantFromMillis(value: Long?) = value?.let { Instant.ofEpochMilli(it) }
+
+  @TypeConverter
+  fun instantToMillis(instant: Instant?) = instant?.toEpochMilli()
+}
+</pre>
+</div>
+
+<p>
+Если есть необходимость сохранить <code>LocalDateTime</code> в <code>БД</code>, то это можно сделать, преобразовав объект в количество секунд <code>UTC</code> и сохранив в виде целочисленного значения:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-kotlin">object Converters {
+  @TypeConverter
+  fun secondsToLocalDateTime(value: Long?) = value?.let { LocalDateTime.ofEpochSecond(it, 0, ZoneOffset.UTC) }
+
+  @TypeConverter
+  fun localDateTimeToSeconds(date: LocalDateTime?) = date?.toEpochSecond(ZoneOffset.UTC)
+}
+</pre>
+</div>
+
+<p>
+Для сохранение <code>OffsetDateTime</code> и <code>ZonedDateTime</code> проще всего использовать форматирование в строку:
 </p>
 <div class="org-src-container">
 <pre class="src src-kotlin">object Converters {
@@ -420,74 +837,27 @@ res7: java.time.OffsetDateTime = 2023-12-31T23:59:59.999+03:00
 </div>
 
 <p>
-В целом интерфейсы всех этих классов довольно гибкие и позволяют собирать объект из отдельных фрагментов. При работе с какой-то старой системой, где дата и время передаются отдельными полями, и не обязательно в <code>UTC</code>, это может быть очень полезно. Вот пример подобного кода:
+Если надо сохранить <code>ZoneOffset</code>:
 </p>
 
-<pre class="example">
-&gt;&gt;&gt; import java.time.ZoneId
-&gt;&gt;&gt; import java.time.format.DateTimeFormatter
-&gt;&gt;&gt; import java.time.LocalDate
-&gt;&gt;&gt; import java.time.LocalTime
-&gt;&gt;&gt;
-&gt;&gt;&gt; val zoneId = ZoneId.of("Europe/Moscow")
-&gt;&gt;&gt;
-&gt;&gt;&gt; val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yy")
-&gt;&gt;&gt; val departureDate = LocalDate.parse("08.12.23", dateFormatter).atStartOfDay(zoneId)
-&gt;&gt;&gt; departureDate
-res9: java.time.ZonedDateTime = 2023-12-08T00:00+03:00[Europe/Moscow]
-&gt;&gt;&gt;
-&gt;&gt;&gt; val timeFormatter = DateTimeFormatter.ofPattern("HH.mm")
-&gt;&gt;&gt; val departureTime = LocalTime.parse("13.00", timeFormatter)
-&gt;&gt;&gt; departureTime
-res13: java.time.LocalTime = 13:00
-&gt;&gt;&gt;
-&gt;&gt;&gt; departureDate.plusDays(1).with(departureTime).toInstant()
-res15: java.time.Instant = 2023-12-09T10:00:00Z
-</pre>
-</div>
-</div>
-
-<div id="outline-container-orga0b7082" class="outline-2">
-<h2 id="orga0b7082">Временной промежуток</h2>
-<div class="outline-text-2" id="text-orga0b7082">
-<p>
-Помимо ситуаций, когда надо зафиксировать время какого-то события, есть ситуации когда надо зафиксировать длительность некоторого процесса. Для этого есть специальный класс <a href="https://developer.android.com/reference/kotlin/java/time/Duration">Duration</a>, который позволяет описать длительность с точностью до наносекунды, как и <code>Instant</code>. У него есть ряд статических методов, которые позволяет создавать объекты класса из секунд, минут, часов и т.д. Также есть методы, которые позволяет прибавить, отнять определенное количество секунд, минут, часов или уменьшить, увеличить значение в определенное количество раз.
-</p>
-
-<p>
-Пример метода, который позволяет посчитать временной промежуток между двумя <code>Instant</code>:
-</p>
 <div class="org-src-container">
-<pre class="src src-kotlin">fun Instant.diff(instant: Instant): Duration = Duration.ofNanos(until(instant, ChronoUnit.NANOS))
+<pre class="src src-kotlin">object Converters {
+  @TypeConverter
+  fun offsetToSeconds(offset: ZoneOffset?) = offset?.totalSeconds
+
+  @TypeConverter
+  fun secondsToOffset(value: Int?) = value?.let { ZoneOffset.ofTotalSeconds(it) }
+}
 </pre>
 </div>
-
-<p>
-<code>Duration</code> можно легко прибавить к <code>Instant</code> и получить новое значение:
-</p>
-<pre class="example">
-&gt;&gt;&gt; import java.time.Instant
-&gt;&gt;&gt; import java.time.Duration
-&gt;&gt;&gt; import java.time.temporal.ChronoUnit
-&gt;&gt;&gt;
-&gt;&gt;&gt; val now = Instant.now()
-&gt;&gt;&gt; val tenHoursLater = now.plus(Duration.ofHours(1).multipliedBy(10))
-&gt;&gt;&gt; fun Instant.diff(instant: Instant): Duration = Duration.ofNanos(until(instant, ChronoUnit.NANOS))
-&gt;&gt;&gt; now.diff(tenHoursLater)
-res7: java.time.Duration = PT10H
-</pre>
-
-<p>
-Помимо <code>Duration</code> есть класс <a href="https://developer.android.com/reference/kotlin/java/time/Period">Period</a>, который хранит временной промежуток, но делает это используя календарные величины - год, месяц и день.
-</p>
 </div>
 </div>
 
-<div id="outline-container-org67530c6" class="outline-2">
-<h2 id="org67530c6">Заключение</h2>
-<div class="outline-text-2" id="text-org67530c6">
+<div id="outline-container-org1e0a39d" class="outline-2">
+<h2 id="org1e0a39d">Применение</h2>
+<div class="outline-text-2" id="text-org1e0a39d">
 <p>
-В заключение хотелось бы определиться в каких случаях следует использовать тот или иной класс:
+В этой главе хотелось бы определиться, в каких случаях следует использовать тот или иной класс:
 </p>
 
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
@@ -527,7 +897,7 @@ res7: java.time.Duration = PT10H
 </table>
 
 <p>
-Для системных событий не важно в каком часовом поясе они произошли. Важно просто зафиксировать сам факт, что это случилось в определённый момент, чтобы потом можно было восстановить последовательность в целом. Для событий которые будут отображаться в <code>UI</code> желательно зафиксировать часовой пояс, чтобы была возможность отобразить местное время события.
+Для системных событий не важно, в каком часовом поясе они произошли. Важно просто зафиксировать сам факт, что это случилось в определённый момент, чтобы потом можно было восстановить последовательность в целом. Для событий, которые будут отображаться в <code>UI</code>, желательно зафиксировать часовой пояс, чтобы была возможность отобразить местное время события.
 </p>
 
 <div class="org-src-container">
@@ -542,7 +912,7 @@ data class Event(
 </div>
 
 <p>
-<code>Instant</code> и <code>OffsetDateTime</code> легко отформатировать в строку <code>ISO 8601</code> или преобразовать в число <code>Unix time</code>:
+<code>Instant</code> и <code>OffsetDateTime</code> легко отформатировать в строку <code>ISO 8601</code> или преобразовать в целочисленное значение <code>Unix time</code>:
 </p>
 
 <div class="org-src-container">
@@ -573,9 +943,15 @@ fun onDepartureTimeChanged(v: TimePicker, h: Int, m: Int) {
       .also { logger.debug("departure time - $it")})}
 }
 
+fun onZoneChanged(id: String) {
+  departureDate.update { dateTime -&gt;
+    dateTime.withZoneSameLocal(ZoneId.of(id)
+      .also { logger.debug("time zone - $it")})}
+}
+
 fun scheduleAlarm() {
   alarmManager.setAndAllowWhileIdle(RTC_WAKEUP,
-    departureDate.value.toOffsetDateTime().toInstant().toEpochMilli(),
+    departureDate.value.toInstant().toEpochMilli(),
     getAlarmPendingIntent())
 }
 </pre>
@@ -596,6 +972,41 @@ data class VaccinationCertificate(
 )
 </pre>
 </div>
+
+<p>
+В целом интерфейсы всех этих классов довольно гибкие и позволяют собирать объект из отдельных фрагментов. При работе с какой-то старой системой, где дата и время передаются отдельными полями, и не обязательно в <code>UTC</code>, это может быть очень полезно. Вот пример подобного кода:
+</p>
+
+<pre class="example">
+&gt;&gt;&gt; import java.time.ZoneId
+&gt;&gt;&gt; import java.time.format.DateTimeFormatter
+&gt;&gt;&gt; import java.time.LocalDate
+&gt;&gt;&gt; import java.time.LocalTime
+&gt;&gt;&gt;
+&gt;&gt;&gt; val zoneId = ZoneId.of("Europe/Moscow")
+&gt;&gt;&gt;
+&gt;&gt;&gt; val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yy")
+&gt;&gt;&gt; val departureDate = LocalDate.parse("08.12.23", dateFormatter).atStartOfDay(zoneId)
+&gt;&gt;&gt; departureDate
+res9: java.time.ZonedDateTime = 2023-12-08T00:00+03:00[Europe/Moscow]
+&gt;&gt;&gt;
+&gt;&gt;&gt; val timeFormatter = DateTimeFormatter.ofPattern("HH.mm")
+&gt;&gt;&gt; val departureTime = LocalTime.parse("13.00", timeFormatter)
+&gt;&gt;&gt; departureTime
+res13: java.time.LocalTime = 13:00
+&gt;&gt;&gt;
+&gt;&gt;&gt; departureDate.plusDays(1).with(departureTime).toInstant()
+res15: java.time.Instant = 2023-12-09T10:00:00Z
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgf6d017e" class="outline-2">
+<h2 id="orgf6d017e">Заключение</h2>
+<div class="outline-text-2" id="text-orgf6d017e">
+<p>
+В этой статье, от простого к сложному, был рассмотрен <code>JSR-310 API</code>, который обладает продуманным дизайном и позволяет решать множество задач, связанных с обработкой даты и времени. Упор делался на понимание базовых концепций и обзор основных классов со сценариями использования. Были даны примеры готового кода, которые позволят быстро применить полученные знания на практике.
+</p>
 </div>
 </div>
 </div>
