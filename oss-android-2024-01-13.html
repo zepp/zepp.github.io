@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru" xml:lang="ru">
+<head>
+<!-- 2024-03-29 Пт 11:14 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Анализ любимых <code>OSS</code> проектов под Android <span class="timestamp-wrapper"><span class="timestamp">&lt;Сб 13 янв 2024&gt;</span></span></title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Павел Соколов" />
+<script src="dist/bundle.js"></script>
+<meta property="og:type" content="article" />
+</head>
+<body>
+<div id="content">
+<h1 class="title">Анализ любимых <code>OSS</code> проектов под Android <span class="timestamp-wrapper"><span class="timestamp">&lt;Сб 13 янв 2024&gt;</span></span></h1>
+<p>
+Давно хочу принять участие в разработке какого-нибудь <code>OSS</code> проекта, во имя всеобщего блага и строчки в резюме, конечно же. Поскольку я являюсь активным пользователем этого самого <code>OSS</code> и Android разработчиком, то вариантов, казалось бы, хоть отбавляй, но есть нюансы. Надо выбрать какой-то проект, который построен на относительно свежем стэке, а в идеале позволяющий применить новые технологии, например, <code>Jepack Compose</code>. Поэтому я решил проанализировать исходный код программ, которые сам постоянно использую, с целью выяснить на сколько перспективно влезть в их разработку и сделать пару-тройку <code>PR</code>.
+</p>
+
+<div id="outline-container-org359db73" class="outline-2">
+<h2 id="org359db73"><a href="https://github.com/syncthing/syncthing-android">Syncthing</a></h2>
+<div class="outline-text-2" id="text-org359db73">
+<p>
+Позволяет синхронизировать файлы между устройствами и создавать что-то вроде кластера, где все устройства синхронизируются друг с другом. В случае невозможности пустить трафик напрямую, используется публичные сервера для передачи трафика.
+</p>
+
+<p>
+Что внутри:
+</p>
+<ul class="org-ul">
+<li>исходный код целиком на Java</li>
+<li>многопоточность: <code>RxJava</code> <i>не используется</i>; используется <code>Handler</code>, <code>Thread</code></li>
+<li>архитектурные компоненты Google <i>не используются</i></li>
+<li><code>Navigation Component</code> <i>не используется</i></li>
+<li>вся навигация на основе <code>Activity</code>, есть четыре фрагмента</li>
+<li>часть логики прям на <code>UI</code>. Презентеров, контролеров нет.</li>
+<li><code>DI</code>: dagger</li>
+<li>простая архитектура и небольшая кодовая база</li>
+</ul>
+
+<p>
+Вывод: бесперспективно
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgaa54950" class="outline-2">
+<h2 id="orgaa54950"><a href="https://github.com/orgzly/orgzly-android">Orgzly</a></h2>
+<div class="outline-text-2" id="text-orgaa54950">
+<p>
+Позволяет работать с <a href="https://orgmode.org/">Org Mode</a> файлами.
+</p>
+
+<p>
+Что внутри:
+</p>
+<ul class="org-ul">
+<li>часть кода на Java, часть на Kotlin</li>
+<li>архитектурные компоненты Google используются</li>
+<li><code>Navigation Component</code> <i>не используется</i>, но есть <code>NavigationView</code></li>
+<li>многопоточность: корутины, <code>Handler</code>, <code>Executor</code> и немного <code>AsyncTask</code> (зоопарк)</li>
+<li>для работы с датой и временем написаны свои классы, вместо использования <a href="https://github.com/JakeWharton/ThreeTenABP">ThreeTenABP</a></li>
+<li>есть сложная работа с <code>БД</code>, для любителей писать <code>SQL</code> запросы</li>
+<li><code>DI</code>: dagger</li>
+<li>многоуровневая архитектура</li>
+</ul>
+
+<p>
+Вывод: можно принять к рассмотрению
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4c49906" class="outline-2">
+<h2 id="org4c49906"><a href="https://github.com/jkuester/unlauncher">Unlauncher</a></h2>
+<div class="outline-text-2" id="text-org4c49906">
+<p>
+Минималистичный лаунчер, т.е. приложение реализующее домашний экран, из которого происходит запуск остальных приложений.
+</p>
+
+<p>
+Что внутри:
+</p>
+<ul class="org-ul">
+<li>исходный код целиком на Kotlin</li>
+<li>архитектурные компоненты Google используются</li>
+<li><code>Navigation Component</code> используется</li>
+<li>многопоточность: корутины</li>
+<li><code>DI</code>: dagger, hilt</li>
+<li>относительно небольшая кодовая база</li>
+</ul>
+
+<p>
+Вывод: лучший вариант
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8367ffb" class="outline-2">
+<h2 id="org8367ffb"><a href="https://github.com/thunderbird/thunderbird-android">K-9 Mail</a></h2>
+<div class="outline-text-2" id="text-org8367ffb">
+<p>
+Почтовый клиент, который стал частью проекта Thunderbird.
+</p>
+
+<p>
+Что внутри:
+</p>
+<ul class="org-ul">
+<li>часть кода на Java, часть на Kotlin</li>
+<li>архитектурные компоненты Google используются</li>
+<li><code>Navigation Component</code> используется</li>
+<li><code>Jetpack Compose</code> <i>используется</i></li>
+<li>многопоточность: корутины, <code>Executor</code>, <code>AsyncTask</code>, <code>Handler</code> (опять зоопарк)</li>
+<li><code>DI</code>: koin</li>
+<li>большая кодовая база</li>
+</ul>
+
+<p>
+Вывод: хороший вариант
+</p>
+</div>
+</div>
+
+<div id="outline-container-org02f5960" class="outline-2">
+<h2 id="org02f5960">Заключение</h2>
+<div class="outline-text-2" id="text-org02f5960">
+<p>
+Для моих целей Unlauncher подходит больше всего, т.к. имеет относительно небольшую и понятную кодовую базу на Kotlin, куда ещё не затащили <code>Jetpack Compose</code>. Кстати, в этот проект я уже делал один небольшой <a href="https://github.com/jkuester/unlauncher/pull/171">PR</a>, где обновил локализацию на родной язык.
+</p>
+
+<p>
+Отдельно хочу отметить, что качество некоторых <code>OSS</code> проектов удручает. Бессмысленно предъявлять авторам какие-то претензии, т.к. они не на зарплате, а занимаются своими проектами в свободное время, но при текущем темпе смены технологий их проекты быстро устаревают и погружаются в стазис. На мой взгляд смысла доделывать Syncthing нет никакого т.к. его уже надо полностью <i>переделывать</i>. Никто не будет создавать <code>PR</code> в этот проект т.к. смысла изучать вчерашние технологии нет. Не забываем бежать, чтобы стоять на месте.
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>
