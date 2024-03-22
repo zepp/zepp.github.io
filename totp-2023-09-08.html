@@ -1,75 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru" xml:lang="ru">
 <head>
-<!-- 2023-11-20 Пн 23:06 -->
+<!-- 2024-03-29 Пт 11:15 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Чем так полезен <code>TOTP</code> <span class="timestamp-wrapper"><span class="timestamp">&lt;Пт 08 сен 2023&gt;</span></span></title>
 <meta name="generator" content="Org mode" />
-<meta name="author" content="Зеппа" />
-<meta property="og:title" content="Чем так полезен TOTP" />
+<meta name="author" content="Павел Соколов" />
+<script src="dist/bundle.js"></script>
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://blog.zeppa.xyz/totp-2023-09-08.html" />
-<link rel="stylesheet" type="text/css" href="article.css" />
-<script type="text/javascript">
-/*
-@licstart  The following is the entire license notice for the
-JavaScript code in this tag.
-
-Copyright (C) 2012-2020 Free Software Foundation, Inc.
-
-The JavaScript code in this tag is free software: you can
-redistribute it and/or modify it under the terms of the GNU
-General Public License (GNU GPL) as published by the Free Software
-Foundation, either version 3 of the License, or (at your option)
-any later version.  The code is distributed WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
-
-As additional permission under GNU GPL version 3 section 7, you
-may distribute non-source (e.g., minimized or compacted) forms of
-that code without the copy of the GNU GPL normally required by
-section 4, provided you include this license notice and a URL
-through which recipients can access the Corresponding Source.
-
-
-@licend  The above is the entire license notice
-for the JavaScript code in this tag.
-*/
-<!--/*--><![CDATA[/*><!--*/
- function CodeHighlightOn(elem, id)
- {
-   var target = document.getElementById(id);
-   if(null != target) {
-     elem.cacheClassElem = elem.className;
-     elem.cacheClassTarget = target.className;
-     target.className = "code-highlighted";
-     elem.className   = "code-highlighted";
-   }
- }
- function CodeHighlightOff(elem, id)
- {
-   var target = document.getElementById(id);
-   if(elem.cacheClassElem)
-     elem.className = elem.cacheClassElem;
-   if(elem.cacheClassTarget)
-     target.className = elem.cacheClassTarget;
- }
-/*]]>*///-->
-</script>
 </head>
 <body>
 <div id="content">
 <h1 class="title">Чем так полезен <code>TOTP</code> <span class="timestamp-wrapper"><span class="timestamp">&lt;Пт 08 сен 2023&gt;</span></span></h1>
 <p>
-Есть ряд факторов, почему <code>TOTP</code> (Time-based one-time password) лучше чем <code>OTP</code> через <code>SMS</code>.
+В этой краткой статье я хочу рассмотреть то, чем может быть полезен и удобен <code>TOTP</code> для обычного человека. Это не разбор технологии исключительно с точки зрения информационной безопасности.
 </p>
 
 <p>
-Первый из них: сотовый номер не принадлежит абоненту. Конфликт с сотовым оператором может привести к полной потери доступа к некоторым сайтам или потребуется ощутимое количество времени чтобы его восстановить (идти ногами в офис или отделение банка с паспортом). Вот что пишут на Хабре в статье <a href="https://habr.com/ru/articles/667960/">Тайная жизнь сим-карты: кому принадлежит ваш телефонный номер и при чем здесь электронная подпись?</a>:
+<code>TOTP</code> (Time-based one-time password) это стандарт, который описывает алгоритм для генерации одноразовых кодов, используемых в <code>2FA</code> (двухфакторной аутентификации). <code>2FA</code> это знакомая большинству людей вещь, с которой они сталкиваются, например, при аутентификации в банковском приложении, когда необходимо вводить код из <code>SMS</code>. Смысл в том, что кроме пароля появляется дополнительный фактор, а именно фактор <i>владения</i>, который заключается в том, что сотовый номер и телефон с SIM-картой принадлежат вам.
 </p>
+
+<p>
+Доставка одноразовых кодов через <code>SMS</code> это небезопасный и ненадёжный способ. Ниже я рассмотрю почему это так.
+</p>
+
+<div id="outline-container-orgcc996bc" class="outline-2">
+<h2 id="orgcc996bc">Кому принадлежит сотовый номер</h2>
+<div class="outline-text-2" id="text-orgcc996bc">
+<p>
+Исходя из определения фактора владения, стоит уточнить, принадлежит ли номер абоненту или нет. Вот что пишут на Хабре в статье <a href="https://habr.com/ru/articles/667960/">Тайная жизнь сим-карты: кому принадлежит ваш телефонный номер и при чем здесь электронная подпись?</a>:
+</p>
+
 <blockquote>
 <p>
 Номер телефона изначально принадлежит Российской Федерации, то есть государству, которое выделяет номера операторам связи, а те в свою очередь — абонентам. Причем российские телефонные номера являются частью международной системы нумерации.
@@ -77,46 +41,80 @@ for the JavaScript code in this tag.
 </blockquote>
 
 <p>
-Следующий фактор: безопасность. Стэк <a href="https://en.wikipedia.org/wiki/Signalling_System_No._7#Protocol_security_vulnerabilities">SS7</a> содержит уязвимости и это уже не раз было использовано для перехвата <code>SMS</code>:
+Конфликт с сотовым оператором может привести к полной потери доступа к некоторым сайтам или потребуется ощутимое количество времени, чтобы его восстановить (идти ногами в офис или отделение банка с паспортом).
 </p>
+</div>
+</div>
+
+<div id="outline-container-org52c5dbb" class="outline-2">
+<h2 id="org52c5dbb">Безопасность доставки <code>SMS</code></h2>
+<div class="outline-text-2" id="text-org52c5dbb">
+<p>
+Стэк <a href="https://en.wikipedia.org/wiki/Signalling_System_No._7#Protocol_security_vulnerabilities">SS7</a> содержит уязвимости и это уже не раз было использовано для перехвата <code>SMS</code>:
+</p>
+
 <blockquote>
 <p>
 In May 2017, O2 Telefónica, a German mobile service provider, confirmed that the SS7 vulnerabilities had been exploited to bypass two-factor authentication to achieve unauthorized withdrawals from bank accounts. The perpetrators installed malware on compromised computers, allowing them to collect online banking account credentials and telephone numbers. They set up redirects for the victims' telephone numbers to telephone lines controlled by them. Confirmation calls and SMS text messages of two-factor authentication procedures were routed to telephone numbers controlled by the attackers. This enabled them to log into victims' online bank accounts and effect money transfers
 </p>
 </blockquote>
+</div>
+</div>
 
+<div id="outline-container-org12d9e85" class="outline-2">
+<h2 id="org12d9e85">Надёжность</h2>
+<div class="outline-text-2" id="text-org12d9e85">
 <p>
-Ещё один фактор: простота и надёжность. Чем более сложная система и чем больше в ней узлов, тем больше точек отказа. В случае <code>TOTP</code> код генерируется на стороне <i>клиента</i> и после отсылается на сервер для подтверждения операции или завершения аутентификации. Иными словами код не надо предварительно пересылать от сервера к клиенту чтобы клиент послал его обратно, что гораздо более безопасно. Вот пример <a href="https://www.rbc.ru/politics/08/09/2023/64fac0899a79479f119e88a6">Проблемы с получением СМС для голосования в Москве</a>:
+Чем более сложная система и чем больше в ней узлов, тем больше точек отказа. Если используется <code>TOTP</code>, то код генерируется на стороне <i>клиента</i> и после отсылается на сервер для подтверждения операции или завершения аутентификации. Иными словами, код не надо предварительно пересылать от сервера к клиенту, чтобы клиент послал его обратно, что гораздо более надёжно и безопасно. Вот пример <a href="https://www.rbc.ru/politics/08/09/2023/64fac0899a79479f119e88a6">Проблемы с получением СМС для голосования в Москве</a>:
 </p>
+
 <blockquote>
 <p>
-Пользователи на официальной странице департамента информационных технологий Москвы во «ВКонтакте» пожаловались на проблему с доступом к электронному голосованию на сервисе московских госуслуг (mos.ru): им не приходит СМС-сообщение с кодом, который нужен для онлайн-участия в выборах мэра столицы. В том, что СМС не приходят, убедились корреспонденты РБК.
+Пользователи на официальной странице департамента информационных технологий Москвы во «ВКонтакте» пожаловались на проблему с доступом к электронному голосованию на сервисе московских госуслуг (mos.ru): им не приходит SMS-сообщение с кодом, который нужен для онлайн-участия в выборах мэра столицы. В том, что SMS не приходят, убедились корреспонденты РБК.
 </p>
 </blockquote>
+
 <p>
-В этом случае всё списали на кибератаку, но роли это не играет.
+Скорей всего отказал сервис выполняющий отправку <code>SMS</code> и доступ к системе пропал.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5edc290" class="outline-2">
+<h2 id="org5edc290">Проблемы с доставкой кодов</h2>
+<div class="outline-text-2" id="text-org5edc290">
+<p>
+Проблемы с доставкой могут возникнуть при неполадках в сотовой сети оператора или нахождение клиента вне зоны действия сети. Последнее возможно не только в случаях, когда клиент действительно находится вне зоны действия сети, но и если не включен или не доступен роуминг.
 </p>
 
 <p>
-Помимо этого будет обидно, если находясь за границей в критической ситуации, не получится зайти на Госуслуги или в банковский клиент, потому что не дошла SMS. Вот <a href="https://www.rbc.ru/technology_and_media/02/09/2023/64f202f89a794758fdd0d9b2">Российские абоненты «большой четверки» останутся без роуминга в Канаде</a>:
+Вот пример ситуации, когда <a href="https://www.rbc.ru/technology_and_media/02/09/2023/64f202f89a794758fdd0d9b2">Российские абоненты «большой четверки» останутся без роуминга в Канаде</a>:
 </p>
+
 <blockquote>
 <p>
 Канада ввела санкции против сотовых операторов МТС, «МегаФон», «Т2 РТК Холдинг» (оказывает услуги под брендом Tele2) и «ВымпелКом» (бренд «Билайн»), а также против ряда других компаний и физлиц в июле этого года. В пояснении говорилось, что эти телекоммуникационные компании связаны с российским военно-промышленным комплексом. Санкции запрещают совершать сделки с попавшими в список лицами и компаниями, а также участвовать в любой деятельности, связанной с любым их имуществом, предоставлять им финансовые или сопутствующие услуги &#x2026; абоненты смогут получать услуги связи, подключившись к Wi-Fi или купив сим-карты местных операторов, но без роуминга они не смогут получать СМС на российский номер — например, для авторизации или подтверждения банковских транзакций.
 </p>
 </blockquote>
+</div>
+</div>
 
+<div id="outline-container-org9452568" class="outline-2">
+<h2 id="org9452568">Заключение</h2>
+<div class="outline-text-2" id="text-org9452568">
 <p>
-Последний фактор это удобство. Некоторые сайты требуют включения хоть какого-то <code>2FA</code> и, пока это не сделано, они будут ныть и слать <code>OTP-коды</code> на почту, что не удобно и не безопасно. Для подобных случаев, как правило, можно использовать <code>TOTP</code>, если нет желания указывать свой номер телефона. В качестве приложения можно использовать, например, <a href="https://authy.com/features/">Authy</a> у которого есть версия для десктопа и синхронизация.
+Исходя из обозначенных выше проблем, стоит делать выбор в пользу <code>TOTP</code>, там где это доступно. Некоторые сайты требуют включения хоть какого-то <code>2FA</code> и, пока это не сделано, они будут ныть и слать <code>OTP-коды</code> на почту, что неудобно и небезопасно. Поставить Google Authenticator или <a href="https://authy.com/">Authy</a> на телефон не так сложно.
 </p>
 
 <p>
-P.S. Есть хорошая <a href="https://habr.com/ru/articles/534064/">статья</a> на Хабре, которая объясняет как работает <code>TOTP</code>.
+Если интересны технические подробности, то можно почитать статью на Хабре <a href="https://habr.com/ru/articles/534064/">TOTP (Time-based one-time Password algorithm)</a>.
 </p>
 
 <p>
-Обновлено <span class="timestamp-wrapper"><span class="timestamp">&lt;Вс 12 ноя 2023&gt;</span></span>
+Обновлено <span class="timestamp-wrapper"><span class="timestamp">&lt;Пт 22 мар 2024&gt;</span></span>
 </p>
+</div>
+</div>
 </div>
 </body>
 </html>
