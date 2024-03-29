@@ -1,5 +1,6 @@
 import './article.css';
 import 'highlight.js/styles/default.min.css';
+import './org-embedded.js';
 
 import hljs from 'highlight.js/lib/core';
 
