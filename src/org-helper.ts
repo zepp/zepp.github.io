@@ -21,5 +21,6 @@ hljs.registerLanguage('json', json);
 hljs.configure({ languageDetectRe: /\bsrc?-([\w-]+)\b/ });
 
 document.addEventListener('DOMContentLoaded', (event) => {
-    document.querySelectorAll('.src, .example').forEach((element) => hljs.highlightElement(element));
+    document.querySelectorAll<HTMLPreElement>('pre.src, pre.example')
+        .forEach((element) => hljs.highlightElement(element));
 });
