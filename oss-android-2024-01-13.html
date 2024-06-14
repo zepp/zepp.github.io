@@ -3,25 +3,25 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ru" xml:lang="ru">
 <head>
-<!-- 2024-03-29 Пт 11:14 -->
+<!-- 2024-06-14 Пт 14:41 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Анализ любимых <code>OSS</code> проектов под Android <span class="timestamp-wrapper"><span class="timestamp">&lt;Сб 13 янв 2024&gt;</span></span></title>
-<meta name="generator" content="Org mode" />
+<title>Анализ любимых OSS проектов под Android</title>
 <meta name="author" content="Павел Соколов" />
+<meta name="generator" content="Org Mode" />
 <script src="dist/bundle.js"></script>
 <meta property="og:type" content="article" />
 </head>
 <body>
-<div id="content">
-<h1 class="title">Анализ любимых <code>OSS</code> проектов под Android <span class="timestamp-wrapper"><span class="timestamp">&lt;Сб 13 янв 2024&gt;</span></span></h1>
+<div id="content" class="content">
+<h1 class="title">Анализ любимых OSS проектов под Android</h1>
 <p>
-Давно хочу принять участие в разработке какого-нибудь <code>OSS</code> проекта, во имя всеобщего блага и строчки в резюме, конечно же. Поскольку я являюсь активным пользователем этого самого <code>OSS</code> и Android разработчиком, то вариантов, казалось бы, хоть отбавляй, но есть нюансы. Надо выбрать какой-то проект, который построен на относительно свежем стэке, а в идеале позволяющий применить новые технологии, например, <code>Jepack Compose</code>. Поэтому я решил проанализировать исходный код программ, которые сам постоянно использую, с целью выяснить на сколько перспективно влезть в их разработку и сделать пару-тройку <code>PR</code>.
+Давно хочу принять участие в разработке какого-нибудь OSS проекта, во имя всеобщего блага и строчки в резюме, конечно же. Поскольку я являюсь активным пользователем этого самого OSS и Android разработчиком, то вариантов, казалось бы, хоть отбавляй, но есть нюансы. Надо выбрать какой-то проект, который построен на относительно свежем стэке, а в идеале позволяющий применить новые технологии, например, Jetpack Compose. Поэтому я решил проанализировать исходный код программ, которые сам постоянно использую, с целью выяснить на сколько перспективно влезть в их разработку и сделать пару-тройку PR.
 </p>
 
-<div id="outline-container-org359db73" class="outline-2">
-<h2 id="org359db73"><a href="https://github.com/syncthing/syncthing-android">Syncthing</a></h2>
-<div class="outline-text-2" id="text-org359db73">
+<div id="outline-container-orga385af9" class="outline-2">
+<h2 id="orga385af9"><a href="https://github.com/syncthing/syncthing-android">Syncthing</a></h2>
+<div class="outline-text-2" id="text-orga385af9">
 <p>
 Позволяет синхронизировать файлы между устройствами и создавать что-то вроде кластера, где все устройства синхронизируются друг с другом. В случае невозможности пустить трафик напрямую, используется публичные сервера для передачи трафика.
 </p>
@@ -31,12 +31,12 @@
 </p>
 <ul class="org-ul">
 <li>исходный код целиком на Java</li>
-<li>многопоточность: <code>RxJava</code> <i>не используется</i>; используется <code>Handler</code>, <code>Thread</code></li>
+<li>многопоточность: RxJava <i>не используется</i>; используется <code>Handler</code>, <code>Thread</code></li>
 <li>архитектурные компоненты Google <i>не используются</i></li>
-<li><code>Navigation Component</code> <i>не используется</i></li>
+<li>Navigation Component <i>не используется</i></li>
 <li>вся навигация на основе <code>Activity</code>, есть четыре фрагмента</li>
-<li>часть логики прям на <code>UI</code>. Презентеров, контролеров нет.</li>
-<li><code>DI</code>: dagger</li>
+<li>часть логики прям на UI. Презентеров, контролеров нет.</li>
+<li>DI: Dagger</li>
 <li>простая архитектура и небольшая кодовая база</li>
 </ul>
 
@@ -46,9 +46,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgaa54950" class="outline-2">
-<h2 id="orgaa54950"><a href="https://github.com/orgzly/orgzly-android">Orgzly</a></h2>
-<div class="outline-text-2" id="text-orgaa54950">
+<div id="outline-container-orgedc3c8c" class="outline-2">
+<h2 id="orgedc3c8c"><a href="https://github.com/orgzly/orgzly-android">Orgzly</a></h2>
+<div class="outline-text-2" id="text-orgedc3c8c">
 <p>
 Позволяет работать с <a href="https://orgmode.org/">Org Mode</a> файлами.
 </p>
@@ -59,11 +59,11 @@
 <ul class="org-ul">
 <li>часть кода на Java, часть на Kotlin</li>
 <li>архитектурные компоненты Google используются</li>
-<li><code>Navigation Component</code> <i>не используется</i>, но есть <code>NavigationView</code></li>
+<li>Navigation Component <i>не используется</i>, но есть <code>NavigationView</code></li>
 <li>многопоточность: корутины, <code>Handler</code>, <code>Executor</code> и немного <code>AsyncTask</code> (зоопарк)</li>
 <li>для работы с датой и временем написаны свои классы, вместо использования <a href="https://github.com/JakeWharton/ThreeTenABP">ThreeTenABP</a></li>
-<li>есть сложная работа с <code>БД</code>, для любителей писать <code>SQL</code> запросы</li>
-<li><code>DI</code>: dagger</li>
+<li>есть сложная работа с БД, для любителей писать SQL запросы</li>
+<li>DI: Dagger</li>
 <li>многоуровневая архитектура</li>
 </ul>
 
@@ -73,9 +73,9 @@
 </div>
 </div>
 
-<div id="outline-container-org4c49906" class="outline-2">
-<h2 id="org4c49906"><a href="https://github.com/jkuester/unlauncher">Unlauncher</a></h2>
-<div class="outline-text-2" id="text-org4c49906">
+<div id="outline-container-org95c8cf1" class="outline-2">
+<h2 id="org95c8cf1"><a href="https://github.com/jkuester/unlauncher">Unlauncher</a></h2>
+<div class="outline-text-2" id="text-org95c8cf1">
 <p>
 Минималистичный лаунчер, т.е. приложение реализующее домашний экран, из которого происходит запуск остальных приложений.
 </p>
@@ -86,9 +86,9 @@
 <ul class="org-ul">
 <li>исходный код целиком на Kotlin</li>
 <li>архитектурные компоненты Google используются</li>
-<li><code>Navigation Component</code> используется</li>
+<li>Navigation Component используется</li>
 <li>многопоточность: корутины</li>
-<li><code>DI</code>: dagger, hilt</li>
+<li>DI: dagger, hilt</li>
 <li>относительно небольшая кодовая база</li>
 </ul>
 
@@ -98,9 +98,9 @@
 </div>
 </div>
 
-<div id="outline-container-org8367ffb" class="outline-2">
-<h2 id="org8367ffb"><a href="https://github.com/thunderbird/thunderbird-android">K-9 Mail</a></h2>
-<div class="outline-text-2" id="text-org8367ffb">
+<div id="outline-container-org9cfa7d9" class="outline-2">
+<h2 id="org9cfa7d9"><a href="https://github.com/thunderbird/thunderbird-android">K-9 Mail</a></h2>
+<div class="outline-text-2" id="text-org9cfa7d9">
 <p>
 Почтовый клиент, который стал частью проекта Thunderbird.
 </p>
@@ -111,10 +111,10 @@
 <ul class="org-ul">
 <li>часть кода на Java, часть на Kotlin</li>
 <li>архитектурные компоненты Google используются</li>
-<li><code>Navigation Component</code> используется</li>
-<li><code>Jetpack Compose</code> <i>используется</i></li>
+<li>Navigation Component используется</li>
+<li>Jetpack Compose <i>используется</i></li>
 <li>многопоточность: корутины, <code>Executor</code>, <code>AsyncTask</code>, <code>Handler</code> (опять зоопарк)</li>
-<li><code>DI</code>: koin</li>
+<li>DI: Koin</li>
 <li>большая кодовая база</li>
 </ul>
 
@@ -124,15 +124,19 @@
 </div>
 </div>
 
-<div id="outline-container-org02f5960" class="outline-2">
-<h2 id="org02f5960">Заключение</h2>
-<div class="outline-text-2" id="text-org02f5960">
+<div id="outline-container-orgc6341a8" class="outline-2">
+<h2 id="orgc6341a8">Заключение</h2>
+<div class="outline-text-2" id="text-orgc6341a8">
 <p>
-Для моих целей Unlauncher подходит больше всего, т.к. имеет относительно небольшую и понятную кодовую базу на Kotlin, куда ещё не затащили <code>Jetpack Compose</code>. Кстати, в этот проект я уже делал один небольшой <a href="https://github.com/jkuester/unlauncher/pull/171">PR</a>, где обновил локализацию на родной язык.
+Для моих целей Unlauncher подходит больше всего, т.к. имеет относительно небольшую и понятную кодовую базу на Kotlin, куда ещё не затащили Jetpack Compose. Кстати, в этот проект я уже делал один небольшой <a href="https://github.com/jkuester/unlauncher/pull/171">PR</a>, где обновил локализацию на родной язык.
 </p>
 
 <p>
-Отдельно хочу отметить, что качество некоторых <code>OSS</code> проектов удручает. Бессмысленно предъявлять авторам какие-то претензии, т.к. они не на зарплате, а занимаются своими проектами в свободное время, но при текущем темпе смены технологий их проекты быстро устаревают и погружаются в стазис. На мой взгляд смысла доделывать Syncthing нет никакого т.к. его уже надо полностью <i>переделывать</i>. Никто не будет создавать <code>PR</code> в этот проект т.к. смысла изучать вчерашние технологии нет. Не забываем бежать, чтобы стоять на месте.
+Отдельно хочу отметить, что качество некоторых OSS проектов удручает. Бессмысленно предъявлять авторам какие-то претензии, т.к. они не на зарплате, а занимаются своими проектами в свободное время, но при текущем темпе смены технологий их проекты быстро устаревают и погружаются в стазис. На мой взгляд смысла доделывать Syncthing нет никакого т.к. его уже надо полностью <i>переделывать</i>. Никто не будет создавать PR в этот проект т.к. смысла изучать вчерашние технологии нет. Не забываем бежать, чтобы стоять на месте.
+</p>
+
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">&lt;Сб 13 янв 2024&gt;</span></span>
 </p>
 </div>
 </div>

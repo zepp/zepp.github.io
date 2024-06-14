@@ -3,33 +3,33 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ru" xml:lang="ru">
 <head>
-<!-- 2024-03-29 Пт 11:15 -->
+<!-- 2024-06-14 Пт 14:54 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Чем так полезен <code>TOTP</code> <span class="timestamp-wrapper"><span class="timestamp">&lt;Пт 08 сен 2023&gt;</span></span></title>
-<meta name="generator" content="Org mode" />
+<title>Чем так полезен TOTP</title>
 <meta name="author" content="Павел Соколов" />
+<meta name="generator" content="Org Mode" />
 <script src="dist/bundle.js"></script>
 <meta property="og:type" content="article" />
 </head>
 <body>
-<div id="content">
-<h1 class="title">Чем так полезен <code>TOTP</code> <span class="timestamp-wrapper"><span class="timestamp">&lt;Пт 08 сен 2023&gt;</span></span></h1>
+<div id="content" class="content">
+<h1 class="title">Чем так полезен TOTP</h1>
 <p>
-В этой краткой статье я хочу рассмотреть то, чем может быть полезен и удобен <code>TOTP</code> для обычного человека. Это не разбор технологии исключительно с точки зрения информационной безопасности.
+В этой краткой статье я хочу рассмотреть то, чем может быть полезен и удобен TOTP для обычного человека. Это не разбор технологии исключительно с точки зрения информационной безопасности.
 </p>
 
 <p>
-<code>TOTP</code> (Time-based one-time password) это стандарт, который описывает алгоритм для генерации одноразовых кодов, используемых в <code>2FA</code> (двухфакторной аутентификации). <code>2FA</code> это знакомая большинству людей вещь, с которой они сталкиваются, например, при аутентификации в банковском приложении, когда необходимо вводить код из <code>SMS</code>. Смысл в том, что кроме пароля появляется дополнительный фактор, а именно фактор <i>владения</i>, который заключается в том, что сотовый номер и телефон с SIM-картой принадлежат вам.
+TOTP (Time-based one-time password) это стандарт, который описывает алгоритм для генерации одноразовых кодов, используемых в 2FA (двухфакторной аутентификации). 2FA это знакомая большинству людей вещь, с которой они сталкиваются, например, при аутентификации в банковском приложении, когда необходимо вводить код из SMS. Смысл в том, что кроме пароля появляется дополнительный фактор, а именно фактор <i>владения</i>, который заключается в том, что сотовый номер и телефон с SIM-картой принадлежат вам.
 </p>
 
 <p>
-Доставка одноразовых кодов через <code>SMS</code> это небезопасный и ненадёжный способ. Ниже я рассмотрю почему это так.
+Доставка одноразовых кодов через SMS это небезопасный и ненадёжный способ. Ниже я рассмотрю почему это так.
 </p>
 
-<div id="outline-container-orgcc996bc" class="outline-2">
-<h2 id="orgcc996bc">Кому принадлежит сотовый номер</h2>
-<div class="outline-text-2" id="text-orgcc996bc">
+<div id="outline-container-org0423136" class="outline-2">
+<h2 id="org0423136">Кому принадлежит сотовый номер</h2>
+<div class="outline-text-2" id="text-org0423136">
 <p>
 Исходя из определения фактора владения, стоит уточнить, принадлежит ли номер абоненту или нет. Вот что пишут на Хабре в статье <a href="https://habr.com/ru/articles/667960/">Тайная жизнь сим-карты: кому принадлежит ваш телефонный номер и при чем здесь электронная подпись?</a>:
 </p>
@@ -46,11 +46,11 @@
 </div>
 </div>
 
-<div id="outline-container-org52c5dbb" class="outline-2">
-<h2 id="org52c5dbb">Безопасность доставки <code>SMS</code></h2>
-<div class="outline-text-2" id="text-org52c5dbb">
+<div id="outline-container-orgb81fac2" class="outline-2">
+<h2 id="orgb81fac2">Безопасность доставки SMS</h2>
+<div class="outline-text-2" id="text-orgb81fac2">
 <p>
-Стэк <a href="https://en.wikipedia.org/wiki/Signalling_System_No._7#Protocol_security_vulnerabilities">SS7</a> содержит уязвимости и это уже не раз было использовано для перехвата <code>SMS</code>:
+Стэк <a href="https://en.wikipedia.org/wiki/Signalling_System_No._7#Protocol_security_vulnerabilities">SS7</a> содержит уязвимости и это уже не раз было использовано для перехвата SMS:
 </p>
 
 <blockquote>
@@ -61,11 +61,11 @@ In May 2017, O2 Telefónica, a German mobile service provider, confirmed that th
 </div>
 </div>
 
-<div id="outline-container-org12d9e85" class="outline-2">
-<h2 id="org12d9e85">Надёжность</h2>
-<div class="outline-text-2" id="text-org12d9e85">
+<div id="outline-container-orgcc8df68" class="outline-2">
+<h2 id="orgcc8df68">Надёжность</h2>
+<div class="outline-text-2" id="text-orgcc8df68">
 <p>
-Чем более сложная система и чем больше в ней узлов, тем больше точек отказа. Если используется <code>TOTP</code>, то код генерируется на стороне <i>клиента</i> и после отсылается на сервер для подтверждения операции или завершения аутентификации. Иными словами, код не надо предварительно пересылать от сервера к клиенту, чтобы клиент послал его обратно, что гораздо более надёжно и безопасно. Вот пример <a href="https://www.rbc.ru/politics/08/09/2023/64fac0899a79479f119e88a6">Проблемы с получением СМС для голосования в Москве</a>:
+Чем более сложная система и чем больше в ней узлов, тем больше точек отказа. Если используется TOTP, то код генерируется на стороне <i>клиента</i> и после отсылается на сервер для подтверждения операции или завершения аутентификации. Иными словами, код не надо предварительно пересылать от сервера к клиенту, чтобы клиент послал его обратно, что гораздо более надёжно и безопасно. Вот пример <a href="https://www.rbc.ru/politics/08/09/2023/64fac0899a79479f119e88a6">Проблемы с получением СМС для голосования в Москве</a>:
 </p>
 
 <blockquote>
@@ -75,14 +75,14 @@ In May 2017, O2 Telefónica, a German mobile service provider, confirmed that th
 </blockquote>
 
 <p>
-Скорей всего отказал сервис выполняющий отправку <code>SMS</code> и доступ к системе пропал.
+Скорей всего отказал сервис выполняющий отправку SMS и доступ к системе пропал.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org5edc290" class="outline-2">
-<h2 id="org5edc290">Проблемы с доставкой кодов</h2>
-<div class="outline-text-2" id="text-org5edc290">
+<div id="outline-container-org6841e6b" class="outline-2">
+<h2 id="org6841e6b">Проблемы с доставкой кодов</h2>
+<div class="outline-text-2" id="text-org6841e6b">
 <p>
 Проблемы с доставкой могут возникнуть при неполадках в сотовой сети оператора или нахождение клиента вне зоны действия сети. Последнее возможно не только в случаях, когда клиент действительно находится вне зоны действия сети, но и если не включен или не доступен роуминг.
 </p>
@@ -99,15 +99,19 @@ In May 2017, O2 Telefónica, a German mobile service provider, confirmed that th
 </div>
 </div>
 
-<div id="outline-container-org9452568" class="outline-2">
-<h2 id="org9452568">Заключение</h2>
-<div class="outline-text-2" id="text-org9452568">
+<div id="outline-container-org235a9b4" class="outline-2">
+<h2 id="org235a9b4">Заключение</h2>
+<div class="outline-text-2" id="text-org235a9b4">
 <p>
-Исходя из обозначенных выше проблем, стоит делать выбор в пользу <code>TOTP</code>, там где это доступно. Некоторые сайты требуют включения хоть какого-то <code>2FA</code> и, пока это не сделано, они будут ныть и слать <code>OTP-коды</code> на почту, что неудобно и небезопасно. Поставить Google Authenticator или <a href="https://authy.com/">Authy</a> на телефон не так сложно.
+Исходя из обозначенных выше проблем, стоит делать выбор в пользу TOTP, там где это доступно. Некоторые сайты требуют включения хоть какого-то 2FA и, пока это не сделано, они будут ныть и слать OTP-коды на почту, что неудобно и небезопасно. Поставить Google Authenticator или <a href="https://authy.com/">Authy</a> на телефон не так сложно.
 </p>
 
 <p>
 Если интересны технические подробности, то можно почитать статью на Хабре <a href="https://habr.com/ru/articles/534064/">TOTP (Time-based one-time Password algorithm)</a>.
+</p>
+
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">&lt;Пт 08 сен 2023&gt;</span></span>
 </p>
 
 <p>
