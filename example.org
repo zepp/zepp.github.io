@@ -1,0 +1,86 @@
+* Article title
+
+Text text text text text text text. Text *bold bold* text text text text text. Text text text /italic italic/ text text. Text text text text +strike through+ text text. Text _underline underline_ text text text text text. Text =3429e299-ff7e-4861-974c-3cc3f4ea0054= text text text text text text. Text text text text [2024-06-23 Вс] text text text. Text text text text [[https://www.google.com/][hyperlink]] text text.
+
+** Lists
+
+Text text text text text text. Text text text text text text. Text text text text text text. Text text text text text text. Text text text text text text. Text text text text text text. Text text text text text text. Text text text text text text. Text text text text text text.
+
+Text text text text text text text text:
+- unordered list item text
+- unordered list item text text text text text text text text text text text text text text text text text text text text text text text text text text text text
+- unordered list item
+
+Text text text text text text. Text text text text text text. Text text text text text text. Text text text text text text:
++ unordered list item text text text text text text text text text
++ unordered list item text text text
++ unordered list item text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text
+
+Text text text text text text. Text text text text text text. Text text text text text text:
+1. ordered list item  text text text text text text text text text =text text= text text text text text text text text text text text text text
+2. ordered list item
+3. ordered list item
+
+** Quotes, verse and source code
+
+Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text.
+
+#+begin_quote
+text text text text text. text text text text text. text text text text text. text text text text text. text text text text text. text text text text text. text text text text text. text text text text text.
+#+end_quote
+
+Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text.
+
+#+begin_verse
+verse verse verse,
+verse verse verse,
+verse verse,
+verse verse verse
+
+Author Author
+#+end_verse
+
+Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text.
+
+#+begin_src json
+{
+  "property1": 117312,
+  "property2": "text",
+  "property3": true,
+  "property4": ["one", "two", "three"]
+}
+#+end_src
+
+Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text.
+
+#+begin_example
+; comment declared
+; sections defined with multiple values
+[Section-name]
+key=value
+
+; sections defined with multiple values
+option1=true # in-line comments
+option1=false
+#+end_example
+
+** Tables
+
+Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text.
+
+| Column 1         | Column 2                                                                                         |
+|------------------+--------------------------------------------------------------------------------------------------|
+| Text             | description description description description =020b7d32-d430-4d49-9c56-203123f90de9=           |
+| Text             | description description description                                                              |
+| Text text        | description description description description description  description description description |
+| =code code code= | text                                                                                             |
+|------------------+--------------------------------------------------------------------------------------------------|
+
+Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text.
+
+
+** Final
+
+Text text text text. Text text text text. Text text text text. Text text text text. Text text text text.Text text text text.
+
+[2024-06-23 Вс]
