@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ru" xml:lang="ru">
 <head>
-<!-- 2024-06-14 Пт 14:41 -->
+<!-- 2024-06-23 Вс 17:21 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Анализ любимых OSS проектов под Android</title>
@@ -19,9 +19,9 @@
 Давно хочу принять участие в разработке какого-нибудь OSS проекта, во имя всеобщего блага и строчки в резюме, конечно же. Поскольку я являюсь активным пользователем этого самого OSS и Android разработчиком, то вариантов, казалось бы, хоть отбавляй, но есть нюансы. Надо выбрать какой-то проект, который построен на относительно свежем стэке, а в идеале позволяющий применить новые технологии, например, Jetpack Compose. Поэтому я решил проанализировать исходный код программ, которые сам постоянно использую, с целью выяснить на сколько перспективно влезть в их разработку и сделать пару-тройку PR.
 </p>
 
-<div id="outline-container-orga385af9" class="outline-2">
-<h2 id="orga385af9"><a href="https://github.com/syncthing/syncthing-android">Syncthing</a></h2>
-<div class="outline-text-2" id="text-orga385af9">
+<div id="outline-container-org0339861" class="outline-2">
+<h2 id="org0339861"><a href="https://github.com/syncthing/syncthing-android">Syncthing</a></h2>
+<div class="outline-text-2" id="text-org0339861">
 <p>
 Позволяет синхронизировать файлы между устройствами и создавать что-то вроде кластера, где все устройства синхронизируются друг с другом. В случае невозможности пустить трафик напрямую, используется публичные сервера для передачи трафика.
 </p>
@@ -30,14 +30,14 @@
 Что внутри:
 </p>
 <ul class="org-ul">
-<li>исходный код целиком на Java</li>
-<li>многопоточность: RxJava <i>не используется</i>; используется <code>Handler</code>, <code>Thread</code></li>
-<li>архитектурные компоненты Google <i>не используются</i></li>
-<li>Navigation Component <i>не используется</i></li>
-<li>вся навигация на основе <code>Activity</code>, есть четыре фрагмента</li>
-<li>часть логики прям на UI. Презентеров, контролеров нет.</li>
-<li>DI: Dagger</li>
-<li>простая архитектура и небольшая кодовая база</li>
+<li>исходный код целиком на Java;</li>
+<li>многопоточность: RxJava не используется, а используется <code>Handler</code> и <code>Thread</code>;</li>
+<li>архитектурные компоненты Google не используются;</li>
+<li>Navigation Component не используется;</li>
+<li>вся навигация на основе <code>Activity</code>, есть четыре фрагмента;</li>
+<li>часть логики прям на UI (презентеров и контролеров нет);</li>
+<li>DI &#x2013; Dagger;</li>
+<li>простая архитектура и небольшая кодовая база.</li>
 </ul>
 
 <p>
@@ -46,9 +46,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgedc3c8c" class="outline-2">
-<h2 id="orgedc3c8c"><a href="https://github.com/orgzly/orgzly-android">Orgzly</a></h2>
-<div class="outline-text-2" id="text-orgedc3c8c">
+<div id="outline-container-orgec4414b" class="outline-2">
+<h2 id="orgec4414b"><a href="https://github.com/orgzly/orgzly-android">Orgzly</a></h2>
+<div class="outline-text-2" id="text-orgec4414b">
 <p>
 Позволяет работать с <a href="https://orgmode.org/">Org Mode</a> файлами.
 </p>
@@ -57,14 +57,14 @@
 Что внутри:
 </p>
 <ul class="org-ul">
-<li>часть кода на Java, часть на Kotlin</li>
-<li>архитектурные компоненты Google используются</li>
-<li>Navigation Component <i>не используется</i>, но есть <code>NavigationView</code></li>
-<li>многопоточность: корутины, <code>Handler</code>, <code>Executor</code> и немного <code>AsyncTask</code> (зоопарк)</li>
-<li>для работы с датой и временем написаны свои классы, вместо использования <a href="https://github.com/JakeWharton/ThreeTenABP">ThreeTenABP</a></li>
-<li>есть сложная работа с БД, для любителей писать SQL запросы</li>
-<li>DI: Dagger</li>
-<li>многоуровневая архитектура</li>
+<li>часть кода на Java, часть на Kotlin;</li>
+<li>архитектурные компоненты Google используются;</li>
+<li>Navigation Component не используется, но есть <code>NavigationView</code>;</li>
+<li>многопоточность на корутинах, <code>Handler</code>, <code>Executor</code> и немного <code>AsyncTask</code>;</li>
+<li>для работы с датой и временем написаны свои классы, вместо <a href="https://github.com/JakeWharton/ThreeTenABP">ThreeTenABP</a>;</li>
+<li>есть сложная работа с БД, для любителей писать SQL запросы;</li>
+<li>DI &#x2013; Dagger;</li>
+<li>многоуровневая архитектура.</li>
 </ul>
 
 <p>
@@ -73,9 +73,9 @@
 </div>
 </div>
 
-<div id="outline-container-org95c8cf1" class="outline-2">
-<h2 id="org95c8cf1"><a href="https://github.com/jkuester/unlauncher">Unlauncher</a></h2>
-<div class="outline-text-2" id="text-org95c8cf1">
+<div id="outline-container-org3c694e1" class="outline-2">
+<h2 id="org3c694e1"><a href="https://github.com/jkuester/unlauncher">Unlauncher</a></h2>
+<div class="outline-text-2" id="text-org3c694e1">
 <p>
 Минималистичный лаунчер, т.е. приложение реализующее домашний экран, из которого происходит запуск остальных приложений.
 </p>
@@ -84,12 +84,12 @@
 Что внутри:
 </p>
 <ul class="org-ul">
-<li>исходный код целиком на Kotlin</li>
-<li>архитектурные компоненты Google используются</li>
-<li>Navigation Component используется</li>
-<li>многопоточность: корутины</li>
-<li>DI: dagger, hilt</li>
-<li>относительно небольшая кодовая база</li>
+<li>исходный код целиком на Kotlin;</li>
+<li>архитектурные компоненты Google используются;</li>
+<li>Navigation Component используется;</li>
+<li>многопоточность на корутинах;</li>
+<li>DI: dagger, hilt;</li>
+<li>относительно небольшая кодовая база.</li>
 </ul>
 
 <p>
@@ -98,9 +98,9 @@
 </div>
 </div>
 
-<div id="outline-container-org9cfa7d9" class="outline-2">
-<h2 id="org9cfa7d9"><a href="https://github.com/thunderbird/thunderbird-android">K-9 Mail</a></h2>
-<div class="outline-text-2" id="text-org9cfa7d9">
+<div id="outline-container-org5f5bc01" class="outline-2">
+<h2 id="org5f5bc01"><a href="https://github.com/thunderbird/thunderbird-android">K-9 Mail</a></h2>
+<div class="outline-text-2" id="text-org5f5bc01">
 <p>
 Почтовый клиент, который стал частью проекта Thunderbird.
 </p>
@@ -109,13 +109,13 @@
 Что внутри:
 </p>
 <ul class="org-ul">
-<li>часть кода на Java, часть на Kotlin</li>
-<li>архитектурные компоненты Google используются</li>
-<li>Navigation Component используется</li>
-<li>Jetpack Compose <i>используется</i></li>
-<li>многопоточность: корутины, <code>Executor</code>, <code>AsyncTask</code>, <code>Handler</code> (опять зоопарк)</li>
-<li>DI: Koin</li>
-<li>большая кодовая база</li>
+<li>часть кода на Java, часть на Kotlin;</li>
+<li>архитектурные компоненты Google используются;</li>
+<li>Navigation Component используется;</li>
+<li>Jetpack Compose используется;</li>
+<li>многопоточность на корутинах, <code>Executor</code>, <code>AsyncTask</code>, <code>Handler</code>;</li>
+<li>DI &#x2013; Koin</li>
+<li>большая кодовая база.</li>
 </ul>
 
 <p>
@@ -124,9 +124,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgc6341a8" class="outline-2">
-<h2 id="orgc6341a8">Заключение</h2>
-<div class="outline-text-2" id="text-orgc6341a8">
+<div id="outline-container-orgeea1d34" class="outline-2">
+<h2 id="orgeea1d34">Заключение</h2>
+<div class="outline-text-2" id="text-orgeea1d34">
 <p>
 Для моих целей Unlauncher подходит больше всего, т.к. имеет относительно небольшую и понятную кодовую базу на Kotlin, куда ещё не затащили Jetpack Compose. Кстати, в этот проект я уже делал один небольшой <a href="https://github.com/jkuester/unlauncher/pull/171">PR</a>, где обновил локализацию на родной язык.
 </p>
