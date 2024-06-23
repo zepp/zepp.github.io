@@ -36,7 +36,6 @@ verse verse verse,
 verse verse verse,
 verse verse,
 verse verse verse
-
 Author Author
 #+end_verse
 
@@ -79,7 +78,7 @@ Text text text text text. Text text text text text. Text text text text text. Te
 Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text.
 
 
-** Final
+** Final chapter
 
 Text text text text. Text text text text. Text text text text. Text text text text. Text text text text.Text text text text.
 
