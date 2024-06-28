@@ -16,6 +16,13 @@ h2 a {
     color: inherit;
 }
 
+h2 a:hover::after {
+    content: "🔗";
+    font-family: emoji;
+    font-variant-emoji: text;
+    margin-left: 8px;
+}
+
 code {
     font-family: monospace, monospace;
     white-space: pre;
@@ -53,28 +60,20 @@ p.verse {
     margin-right: auto;
 }
 
-ul {
+ul, ol {
     line-height: 1.5em;
     text-align: justify;
-    justify-content: space-between;
     margin-top: 0;
-    padding-left: 0;
-    list-style-type: none;
+    padding-left: 2em;
+    list-style-position: outside;
 }
 
-ul li::before {
-    content: "▪";
+ul li {
+    list-style-type: square;
+}
+
+ul li::marker {
     color: #000080;
-    padding: 0 2px;
-    margin-right: 6px;
-}
-
-ol {
-    line-height: 1.5em;
-    text-align: justify;
-    margin-top: 0;
-    padding-left: 0;
-    list-style-position: inside;
 }
 
 table {

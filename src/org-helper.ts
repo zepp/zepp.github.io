@@ -22,7 +22,17 @@ hljs.registerLanguage('ini', ini);
 
 hljs.configure({ languageDetectRe: /\bsrc?-([\w-]+)\b/ });
 
-document.addEventListener('DOMContentLoaded', (event) => {
+function handleAnchorEvent(event: MouseEvent) {
+    const a = event.target as HTMLAnchorElement;
+
+    navigator.clipboard.writeText(a.href);
+    console.debug(`copied: ${a.href}`)
+}
+
+document.addEventListener('DOMContentLoaded', event => {
     document.querySelectorAll<HTMLPreElement>('pre.src, pre.example')
-        .forEach((element) => hljs.highlightElement(element));
+        .forEach(element => hljs.highlightElement(element));
+
+    document.querySelectorAll<HTMLAnchorElement>('h2 a')
+        .forEach(element => element.addEventListener('click', handleAnchorEvent));
 });
