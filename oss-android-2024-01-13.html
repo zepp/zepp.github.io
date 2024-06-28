@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ru" xml:lang="ru">
 <head>
-<!-- 2024-06-23 Вс 17:21 -->
+<!-- 2024-06-28 Пт 09:18 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Анализ любимых OSS проектов под Android</title>
@@ -19,9 +19,9 @@
 Давно хочу принять участие в разработке какого-нибудь OSS проекта, во имя всеобщего блага и строчки в резюме, конечно же. Поскольку я являюсь активным пользователем этого самого OSS и Android разработчиком, то вариантов, казалось бы, хоть отбавляй, но есть нюансы. Надо выбрать какой-то проект, который построен на относительно свежем стэке, а в идеале позволяющий применить новые технологии, например, Jetpack Compose. Поэтому я решил проанализировать исходный код программ, которые сам постоянно использую, с целью выяснить на сколько перспективно влезть в их разработку и сделать пару-тройку PR.
 </p>
 
-<div id="outline-container-org0339861" class="outline-2">
-<h2 id="org0339861"><a href="https://github.com/syncthing/syncthing-android">Syncthing</a></h2>
-<div class="outline-text-2" id="text-org0339861">
+<div id="outline-container-org3041c4e" class="outline-2">
+<h2 id="org3041c4e"><a href="#org3041c4e"><a href="https://github.com/syncthing/syncthing-android">Syncthing</a></a></h2>
+<div class="outline-text-2" id="text-org3041c4e">
 <p>
 Позволяет синхронизировать файлы между устройствами и создавать что-то вроде кластера, где все устройства синхронизируются друг с другом. В случае невозможности пустить трафик напрямую, используется публичные сервера для передачи трафика.
 </p>
@@ -46,9 +46,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgec4414b" class="outline-2">
-<h2 id="orgec4414b"><a href="https://github.com/orgzly/orgzly-android">Orgzly</a></h2>
-<div class="outline-text-2" id="text-orgec4414b">
+<div id="outline-container-orgc77ca5f" class="outline-2">
+<h2 id="orgc77ca5f"><a href="#orgc77ca5f"><a href="https://github.com/orgzly/orgzly-android">Orgzly</a></a></h2>
+<div class="outline-text-2" id="text-orgc77ca5f">
 <p>
 Позволяет работать с <a href="https://orgmode.org/">Org Mode</a> файлами.
 </p>
@@ -73,9 +73,9 @@
 </div>
 </div>
 
-<div id="outline-container-org3c694e1" class="outline-2">
-<h2 id="org3c694e1"><a href="https://github.com/jkuester/unlauncher">Unlauncher</a></h2>
-<div class="outline-text-2" id="text-org3c694e1">
+<div id="outline-container-orgc56ad26" class="outline-2">
+<h2 id="orgc56ad26"><a href="#orgc56ad26"><a href="https://github.com/jkuester/unlauncher">Unlauncher</a></a></h2>
+<div class="outline-text-2" id="text-orgc56ad26">
 <p>
 Минималистичный лаунчер, т.е. приложение реализующее домашний экран, из которого происходит запуск остальных приложений.
 </p>
@@ -98,9 +98,9 @@
 </div>
 </div>
 
-<div id="outline-container-org5f5bc01" class="outline-2">
-<h2 id="org5f5bc01"><a href="https://github.com/thunderbird/thunderbird-android">K-9 Mail</a></h2>
-<div class="outline-text-2" id="text-org5f5bc01">
+<div id="outline-container-orgf5495db" class="outline-2">
+<h2 id="orgf5495db"><a href="#orgf5495db"><a href="https://github.com/thunderbird/thunderbird-android">K-9 Mail</a></a></h2>
+<div class="outline-text-2" id="text-orgf5495db">
 <p>
 Почтовый клиент, который стал частью проекта Thunderbird.
 </p>
@@ -124,9 +124,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgeea1d34" class="outline-2">
-<h2 id="orgeea1d34">Заключение</h2>
-<div class="outline-text-2" id="text-orgeea1d34">
+<div id="outline-container-org3714965" class="outline-2">
+<h2 id="org3714965"><a href="#org3714965">Заключение</a></h2>
+<div class="outline-text-2" id="text-org3714965">
 <p>
 Для моих целей Unlauncher подходит больше всего, т.к. имеет относительно небольшую и понятную кодовую базу на Kotlin, куда ещё не затащили Jetpack Compose. Кстати, в этот проект я уже делал один небольшой <a href="https://github.com/jkuester/unlauncher/pull/171">PR</a>, где обновил локализацию на родной язык.
 </p>

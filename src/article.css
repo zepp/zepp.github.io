@@ -11,6 +11,11 @@ h2 {
     margin-top: 2em;
 }
 
+h2 a {
+    text-decoration: none;
+    color: inherit;
+}
+
 code {
     font-family: monospace, monospace;
     white-space: pre;
