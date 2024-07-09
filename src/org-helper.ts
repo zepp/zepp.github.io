@@ -33,6 +33,6 @@ document.addEventListener('DOMContentLoaded', event => {
     document.querySelectorAll<HTMLPreElement>('pre.src, pre.example')
         .forEach(element => hljs.highlightElement(element));
 
-    document.querySelectorAll<HTMLAnchorElement>('h2 a')
+    document.querySelectorAll<HTMLAnchorElement>('h2 a, h3 a')
         .forEach(element => element.addEventListener('click', handleAnchorEvent));
 });

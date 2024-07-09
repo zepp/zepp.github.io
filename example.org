@@ -86,6 +86,25 @@ Text text text text text. Text text text text text. Text text text text text. Te
 
 Text text text.
 
+** Headlines
+*** Headline 3
+
+Text text text text text text. Text text text text text text. Text text text text text. Text text text text text text. Text text text text text text. Text text text text.
+
+*** Headline 3
+
+Text text text text text text text text. Text text text text. Text text text text text text. Text text text text. Text text text text text text text. Text text text text. Text text text text text text text text. Text text text text.
+
+** Images
+
+Text text text text text text. Text text text text text. Text text text text text text. Text text text text text. Text  text text text. Text text text text text. Text text text text text text. Text text text text.
+
+#+ATTR_HTML: :width 320px
+#+CAPTION: Beautiful OrgMode Logo
+[[./img/logo.png]]
+
+Text text text text. Text text text text. Text text text text.
+
 ** Final chapter
 
 Text text text text. Text text text text. Text text text text. Text text text text. Text text text text.Text text text text.
