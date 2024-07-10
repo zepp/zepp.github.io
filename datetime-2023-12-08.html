@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ru" xml:lang="ru">
 <head>
-<!-- 2024-06-28 Пт 09:18 -->
+<!-- 2024-07-10 Ср 14:33 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Работа с датой и временем при разработке под Android</title>
@@ -44,9 +44,9 @@
 </pre>
 </div>
 
-<div id="outline-container-org03745a3" class="outline-2">
-<h2 id="org03745a3"><a href="#org03745a3">Универсальное время</a></h2>
-<div class="outline-text-2" id="text-org03745a3">
+<div id="outline-container-org12940d3" class="outline-2">
+<h2 id="org12940d3"><a href="#org12940d3">Универсальное время</a></h2>
+<div class="outline-text-2" id="text-org12940d3">
 <p>
 Если рассматривать время как некоторую условно линейную величину (без учёта високосных секунд), то есть число секунд отсчитанных от какой-то определённой начальной точки, то для описания этой величины подойдёт класс <a href="https://developer.android.com/reference/java/time/Instant">Instant</a>. Время в данном понимание не связано с временем суток или географическим местоположением. Этот класс описывает некоторый момент, который имеет одинаковое значение для любой точки на планете.
 </p>
@@ -126,7 +126,7 @@ private final int nanos;
 Если создать объект класса и преобразовать его в строку явным или неявным образом, то получится примерно следующее значение:
 </p>
 
-<pre class="example" id="org8264678">
+<pre class="example" id="org873462d">
 &gt;&gt;&gt; import java.time.Instant
 &gt;&gt;&gt;
 &gt;&gt;&gt; val now = Instant.now()
@@ -143,9 +143,9 @@ res5: kotlin.Long = 1703077311203
 </div>
 </div>
 
-<div id="outline-container-orgf319bf6" class="outline-2">
-<h2 id="orgf319bf6"><a href="#orgf319bf6">Местное время, дата и часовые пояса</a></h2>
-<div class="outline-text-2" id="text-orgf319bf6">
+<div id="outline-container-org10c66e9" class="outline-2">
+<h2 id="org10c66e9"><a href="#org10c66e9">Местное время, дата и часовые пояса</a></h2>
+<div class="outline-text-2" id="text-org10c66e9">
 <p>
 Для описания местного времени есть класс <a href="https://developer.android.com/reference/kotlin/java/time/LocalTime">LocalTime</a>, который буквально хранит часы, минуты и секунды:
 </p>
@@ -206,7 +206,7 @@ private final short day;
 Если связать <code>LocalDateTime</code> с <code>ZoneOffset</code> то получится <a href="https://developer.android.com/reference/java/time/OffsetDateTime">OffsetDateTime</a>, а если с <code>ZoneId</code> то <a href="https://developer.android.com/reference/kotlin/java/time/ZonedDateTime">ZonedDateTime</a>. Можно заглянуть в код, где оба этих класса, <code>OffsetDateTime</code> и <code>ZonedDateTime</code>, агрегируют <code>LocalDateTime</code> и <code>ZoneOffset</code>, в последнем случае ещё добавляется непосредственно <code>ZoneId</code>, и реализуют ряд интерфейсов, чтобы с ними могли работать другие классы из пакета <code>java.time</code>.
 </p>
 
-<pre class="example" id="orgcc51ac1">
+<pre class="example" id="org8d1f832">
 &gt;&gt;&gt; import java.time.LocalDateTime
 &gt;&gt;&gt; import java.time.ZoneId
 &gt;&gt;&gt; import java.time.ZoneOffset
@@ -228,7 +228,7 @@ res11: java.time.OffsetDateTime = 2023-12-20T16:03:12.972+03:00
 В принципе, создать объекты <code>OffsetDateTime</code> и <code>ZonedDateTime</code> можно не только из <code>LocalDateTime</code>, но и из <code>Instant</code> тоже. Сделать это можно следующим образом:
 </p>
 
-<pre class="example" id="org9ae3023">
+<pre class="example" id="org0f63f5c">
 &gt;&gt;&gt; import java.time.Instant
 &gt;&gt;&gt; import java.time.ZoneId
 &gt;&gt;&gt; import java.time.ZoneOffset
@@ -322,9 +322,9 @@ res12: java.time.OffsetDateTime = 2023-12-20T16:04:20.812+03:00
 </div>
 </div>
 
-<div id="outline-container-orgeec1c97" class="outline-2">
-<h2 id="orgeec1c97"><a href="#orgeec1c97">Модификаторы</a></h2>
-<div class="outline-text-2" id="text-orgeec1c97">
+<div id="outline-container-org1e401fd" class="outline-2">
+<h2 id="org1e401fd"><a href="#org1e401fd">Модификаторы</a></h2>
+<div class="outline-text-2" id="text-org1e401fd">
 <p>
 Вышеперечисленные классы реализуют интерфейсы <a href="https://developer.android.com/reference/java/time/temporal/Temporal">Temporal</a> и <a href="https://developer.android.com/reference/java/time/temporal/TemporalAdjuster">TemporalAdjuster</a> (не во всех случаях), которые, в свою очередь, содержат методы, позволяющие модифицировать объект. Эти методы имеют максимально обобщённый вид (отдельным параметром надо указывать в каких единицах измеряется аргумент), и поэтому их не всегда удобно использовать. Помимо этих методов есть более простые и удобные методы, которые позволяют менять отдельные календарные или временные величины и они принимают всего один аргумент. Эти методы не наследуются от какого-то базового класса или интерфейса, а просто имеют одинаковые названия. Все эти методы возвращают изменённую копию объекта, что позволяет сразу передать объект в другой метод или применить следующий модификатор.
 </p>
@@ -407,7 +407,7 @@ public abstract long until (Temporal endExclusive, TemporalUnit unit);
 Вот пример того, как это работает:
 </p>
 
-<pre class="example" id="org08f182d">
+<pre class="example" id="org527f4b9">
 &gt;&gt;&gt; import java.time.OffsetDateTime
 &gt;&gt;&gt; import java.time.temporal.TemporalAdjusters
 &gt;&gt;&gt; import java.time.LocalTime
@@ -487,7 +487,7 @@ res13: java.time.temporal.Temporal = 2023-12-25T16:05:54.733+03:00
 
 <tr>
 <td class="org-left"><code>truncatedTo (TemporalUnit unit)</code></td>
-<td class="org-left">"округляет" по календарной или временной единице</td>
+<td class="org-left">«округляет» по календарной или временной единице</td>
 </tr>
 </tbody>
 </table>
@@ -534,7 +534,7 @@ res13: java.time.temporal.Temporal = 2023-12-25T16:05:54.733+03:00
 <p>
 И примеры их использования:
 </p>
-<pre class="example" id="orgf42c3b7">
+<pre class="example" id="org0160214">
 &gt;&gt;&gt; import java.time.OffsetDateTime
 &gt;&gt;&gt; import java.time.ZoneOffset
 &gt;&gt;&gt; import java.time.temporal.ChronoUnit
@@ -563,7 +563,7 @@ res16: java.time.OffsetDateTime = 2023-12-20T16:07:08.819+04:00
 <p>
 Пример того, как используя простейший модификатор и метод <code>atStartOfDay</code>, который преобразует дату в <code>ZonedDateTime</code> в определённом часовом поясе, можно продемонстрировать переход на зимнее время:
 </p>
-<pre class="example" id="org7079e96">
+<pre class="example" id="orgac0afa7">
 &gt;&gt;&gt; import java.time.ZoneId
 &gt;&gt;&gt; import java.time.LocalDate
 &gt;&gt;&gt; val zoneId = ZoneId.of("Europe/Berlin")
@@ -578,9 +578,9 @@ res6: java.time.ZonedDateTime = 2023-11-01T00:00+01:00[Europe/Berlin]
 </div>
 </div>
 
-<div id="outline-container-org53e7c78" class="outline-2">
-<h2 id="org53e7c78"><a href="#org53e7c78">Форматирование</a></h2>
-<div class="outline-text-2" id="text-org53e7c78">
+<div id="outline-container-org70e4df0" class="outline-2">
+<h2 id="org70e4df0"><a href="#org70e4df0">Форматирование</a></h2>
+<div class="outline-text-2" id="text-org70e4df0">
 <p>
 Любой из вышеперечисленных классов реализует интерфейс <code>TemporalAccessor</code>, поэтому его можно преобразовывать в удобочитаемую строку используя метод <code>format</code> класса <a href="https://developer.android.com/reference/java/time/format/DateTimeFormatter">DateTimeFormatter</a>. Если формат предполагает наличие данных, который данный класс не содержит, то будет кинуто исключение.
 </p>
@@ -588,7 +588,7 @@ res6: java.time.ZonedDateTime = 2023-11-01T00:00+01:00[Europe/Berlin]
 <p>
 Для примера можно преобразовать текущую дату и время во что-то более привычное:
 </p>
-<pre class="example" id="org7f04815">
+<pre class="example" id="org0e855fc">
 &gt;&gt;&gt; import java.time.LocalDateTime
 &gt;&gt;&gt; import java.time.format.DateTimeFormatter
 &gt;&gt;&gt;
@@ -640,7 +640,7 @@ res4: kotlin.String = 16:09, 20 December 2023
 Помимо метода <code>format</code>, у <code>DateTimeFormatter</code> есть метод <code>parse</code>, который позволяет парсить строки. Он возвращает некоторый объект, который реализует интерфейс <code>TemporalAccessor</code>, поэтому нужно дополнительное преобразование, чтобы создать объект нужного класса. Для того чтобы не делать это самому, можно использовать готовые методы классов <code>OffsetDateTime</code> и <code>ZonedDateTime</code>.
 </p>
 
-<pre class="example" id="orgb0fce41">
+<pre class="example" id="org9431c75">
 &gt;&gt;&gt; import java.time.format.DateTimeFormatter
 &gt;&gt;&gt; import java.time.OffsetDateTime
 &gt;&gt;&gt;
@@ -657,9 +657,9 @@ res7: java.time.OffsetDateTime = 2023-12-31T23:59:59.999+03:00
 </div>
 </div>
 
-<div id="outline-container-org67bb3ca" class="outline-2">
-<h2 id="org67bb3ca"><a href="#org67bb3ca">Временной промежуток</a></h2>
-<div class="outline-text-2" id="text-org67bb3ca">
+<div id="outline-container-orge8d0b78" class="outline-2">
+<h2 id="orge8d0b78"><a href="#orge8d0b78">Временной промежуток</a></h2>
+<div class="outline-text-2" id="text-orge8d0b78">
 <p>
 Помимо ситуаций, когда надо зафиксировать время какого-то события, есть ситуации, когда надо зафиксировать длительность некоторого процесса. Для этого есть специальный класс <a href="https://developer.android.com/reference/kotlin/java/time/Duration">Duration</a>, который позволяет описать длительность с точностью до наносекунды, как и <code>Instant</code>. У него есть ряд статических методов, которые позволяют создавать объекты класса из секунд, минут, часов и т.д. Также есть методы-модификаторы, которые позволяют прибавить, отнять определенное количество секунд, минут, часов или уменьшить, увеличить значение в определенное количество раз. Класс реализует интерфейс <code>TemporalAmount</code>, поэтому его можно передавать в качестве аргумента в методы-модификаторы других классов.
 </p>
@@ -675,7 +675,7 @@ res7: java.time.OffsetDateTime = 2023-12-31T23:59:59.999+03:00
 <p>
 Пример использования:
 </p>
-<pre class="example" id="org751fa50">
+<pre class="example" id="org453c5da">
 &gt;&gt;&gt; import java.time.Instant
 &gt;&gt;&gt; import java.time.Duration
 &gt;&gt;&gt; import java.time.temporal.ChronoUnit
@@ -691,7 +691,7 @@ res7: java.time.Duration = PT10H
 Помимо <code>Duration</code> есть класс <a href="https://developer.android.com/reference/kotlin/java/time/Period">Period</a>, который хранит временной промежуток, но делает это через календарные величины &#x2013; год, месяц и день. Используя информацию из предыдущих глав, можно посчитать количество дней в текущем месяце:
 </p>
 
-<pre class="example" id="org1778c0c">
+<pre class="example" id="org3e4bc2a">
 &gt;&gt;&gt; import java.time.ZonedDateTime
 &gt;&gt;&gt; import java.time.temporal.TemporalAdjusters
 &gt;&gt;&gt; import java.time.temporal.ChronoUnit
@@ -716,9 +716,9 @@ res15: java.time.Period = P31D
 </div>
 </div>
 
-<div id="outline-container-orgf38f18b" class="outline-2">
-<h2 id="orgf38f18b"><a href="#orgf38f18b">Хранение</a></h2>
-<div class="outline-text-2" id="text-orgf38f18b">
+<div id="outline-container-org78e7eb5" class="outline-2">
+<h2 id="org78e7eb5"><a href="#org78e7eb5">Хранение</a></h2>
+<div class="outline-text-2" id="text-org78e7eb5">
 <p>
 В данной главе речь пойдёт о том, как сохранить объекты вышеперечисленных классов в Room, самую распространённую реализации БД для Android. Как сохранять сложные типы данных в Room подробно описано вот этой <a href="https://developer.android.com/training/data-storage/room/referencing-data">статье</a>. Если кратко, то необходимо через аннотацию <code>@TypeConverters</code> у класса, описывающего БД, указать другой класс, где хранятся методы выполняющие преобразование сложных типов данных в более примитивные.
 </p>
@@ -802,9 +802,9 @@ abstract class AppDatabase : RoomDatabase() {
 </div>
 </div>
 
-<div id="outline-container-orgb380f65" class="outline-2">
-<h2 id="orgb380f65"><a href="#orgb380f65">Применение</a></h2>
-<div class="outline-text-2" id="text-orgb380f65">
+<div id="outline-container-org1e8d308" class="outline-2">
+<h2 id="org1e8d308"><a href="#org1e8d308">Применение</a></h2>
+<div class="outline-text-2" id="text-org1e8d308">
 <p>
 В этой главе хотелось бы определиться, в каких случаях следует использовать тот или иной класс:
 </p>
@@ -926,7 +926,7 @@ data class VaccinationCertificate(
 В целом интерфейсы всех этих классов довольно гибкие и позволяют собирать объект из отдельных фрагментов. При работе с какой-то старой системой, где дата и время передаются отдельными полями, и не обязательно в UTC, это может быть очень полезно. Вот пример подобного кода:
 </p>
 
-<pre class="example" id="orgd226b88">
+<pre class="example" id="org0404498">
 &gt;&gt;&gt; import java.time.ZoneId
 &gt;&gt;&gt; import java.time.format.DateTimeFormatter
 &gt;&gt;&gt; import java.time.LocalDate
@@ -950,15 +950,15 @@ res15: java.time.Instant = 2023-12-09T10:00:00Z
 </div>
 </div>
 
-<div id="outline-container-org1bfe54b" class="outline-2">
-<h2 id="org1bfe54b"><a href="#org1bfe54b">Заключение</a></h2>
-<div class="outline-text-2" id="text-org1bfe54b">
+<div id="outline-container-org1c0c05b" class="outline-2">
+<h2 id="org1c0c05b"><a href="#org1c0c05b">Заключение</a></h2>
+<div class="outline-text-2" id="text-org1c0c05b">
 <p>
-В этой статье, от простого к сложному, был рассмотрен JSR-310 API, который обладает продуманным дизайном и позволяет решать множество задач, связанных с обработкой даты и времени. Упор делался на понимание базовых концепций и обзор основных классов со сценариями использования. Были даны примеры готового кода, которые позволят быстро применить полученные знания на практике.
+В этой статье, опираясь на собственный опыт разработки приложения для проводников РЖД, я рассмотрел JSR-310 API, который обладает продуманным дизайном и позволяет решать множество задач, связанных с обработкой даты и времени. Упор делался на понимание базовых концепций и обзор основных классов. Были даны примеры готового кода, чтобы облегчить понимание и продемонстрировать возможные сценарии использования, которые позволят быстро применить полученные знания на практике.
 </p>
 
 <p>
-<span class="timestamp-wrapper"><span class="timestamp">&lt;Пт 08 дек 2023&gt;</span></span>, обновлено <span class="timestamp-wrapper"><span class="timestamp">&lt;Чт 27 июн 2024&gt;</span></span>
+<span class="timestamp-wrapper"><span class="timestamp">&lt;Пт 08 дек 2023&gt;</span></span>, обновлено <span class="timestamp-wrapper"><span class="timestamp">&lt;Ср 10 июл 2024&gt;</span></span>
 </p>
 </div>
 </div>
