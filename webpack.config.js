@@ -29,7 +29,11 @@ module.exports = {
       {
         test: /\.tsx?$/,
         use: ['ts-loader']
-      }
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+      },
     ]
   },
   resolve: {
