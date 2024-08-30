@@ -2,6 +2,13 @@ $text-secondary: #000080;
 $background-secondary: #e1e1ea;
 $block-border-radius: 2px;
 
+@font-face {
+  font-family: 'Fira Code';
+  src: url('./FiraCode-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
 h1 {
     text-align: center;
     text-transform: uppercase;
@@ -47,7 +54,7 @@ img {
 }
 
 code {
-    font-family: monospace, monospace;
+    font-family: 'Fira Code';
     white-space: pre;
 }
 
@@ -66,7 +73,7 @@ blockquote p {
 }
 
 pre {
-    font-family: monospace;
+    font-family: 'Fira Code';
     padding: 1em;
     overflow: auto;
     border: 1px solid black;
