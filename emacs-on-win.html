@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru" xml:lang="ru">
+<head>
+<!-- 2025-03-07 Пт 17:43 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Использование Emacs под Windows</title>
+<meta name="author" content="Павел Соколов" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="dist/article.css"/>
+<script src="dist/bundle.js"></script>
+<meta property="og:type" content="article" />
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Использование Emacs под Windows</h1>
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">&lt;Вс 23 фев 2025&gt;</span></span>
+</p>
+
+<p>
+Краткая инструкция, в которой описывается установка и настройка Emacs под Windows для работы в <a href="https://orgmode.org/">Org-mode</a>: написания заметок и инструкций с последующим экспортом в PDF и OpenDocument Text; ведения списка задач. Подразумевается, что Emacs и Org-mode уже настроены, а конфиг лежит где-то на GitHub и надо его только немного адаптировать под Windows. В этом конфиге, помимо всего прочего, должен быть подключен репозиторий MELPA.
+</p>
+
+<p>
+Для хранения org-файлов предполагается использовать Git или Syncthing. Если выбор пал на Git, то тогда в качестве Git-клиента будет использоваться Magit.
+</p>
+
+<div id="outline-container-environment" class="outline-2">
+<h2 id="environment"><a href="#environment">Окружение</a></h2>
+<div class="outline-text-2" id="text-environment">
+<p>
+В качестве домашней директории предполагается использовать просто директорию в корне диска, путь к которой необходимо прописать в переменную окружения <code>HOME</code>. Вероятно, можно использовать директорию, которая указана в переменной <code>HOMEPATH</code>, но этот сценарий полностью не проверялся.
+</p>
+</div>
+</div>
+
+<div id="outline-container-choco" class="outline-2">
+<h2 id="choco"><a href="#choco">Chocolatey</a></h2>
+<div class="outline-text-2" id="text-choco">
+<p>
+Первым делом необходимо установить <a href="https://chocolatey.org/install">choco</a>: скачать скрипт, изменить политику выполнения по умолчанию и запустить сам скрипт.
+</p>
+
+<p>
+Описание требуемой политики с сайта Microsoft (для домашних компьютеров политика по умолчанию &#x2013; <code>Restricted</code>):
+</p>
+
+<blockquote>
+<ul class="org-ul">
+<li>Scripts can run.</li>
+<li>Requires that all scripts and configuration files be signed by a trusted publisher, including scripts that you write on the local computer.</li>
+<li>Prompts you before running scripts from publishers that you haven't yet classified as trusted or untrusted.</li>
+<li>Risks running signed, but malicious, scripts.</li>
+</ul>
+</blockquote>
+
+<p>
+Изменить политику через PowerShell и запустить установочный скрипт (всё это надо делать с правами администратора):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-powershell">PS C:\Temp&gt; Set-ExecutionPolicy AllSigned
+
+Изменение политики выполнения
+Политика выполнения защищает компьютер от ненадежных сценариев. Изменение политики выполнения может поставить под угрозу безопасность системы, как описано в разделе справки, вызываемом командой about_Execution_Policies и расположенном по адресу https:/go.microsoft.com/fwlink/?LinkID=135170 . Вы хотите изменить политику выполнения?
+[Y] Да - Y  [A] Да для всех - A  [N] Нет - N  [L] Нет для всех - L  [S] Приостановить - S  [?] Справка
+(значением по умолчанию является "N"):Y
+PS C:\Temp&gt; .\install.ps1
+</pre>
+</div>
+
+<p>
+После установить необходимые программы следующим образом:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-powershell">PS C:\Temp&gt; choco install emacs findutils grep hunspell.portable git zip unzip miktex strawberryperl
+</pre>
+</div>
+
+<p>
+Пояснение:
+</p>
+<ul class="org-ul">
+<li><code>zip</code> и <code>unzip</code> позволяют делать экспорт из Org-mode в OpenDocument Text;</li>
+<li><code>miktex</code> и <code>strawberryperl</code> позволяют худо-бедно делать экспорт в PDF.</li>
+</ul>
+
+<p>
+В дальнейшем, чтобы обновить все установленные пакеты разом, можно использовать команду:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-powershell">PS C:\Temp&gt; choco upgrade all
+Chocolatey v2.4.2
+Upgrading the following packages:
+all
+</pre>
+</div>
+
+<p>
+Словари для Hunspell можно взять <a href="https://github.com/wooorm/dictionaries">тут</a>. Файлы <code>index.aff</code> и <code>index.dic</code> необходимо скопировать в директорию <code>~/Hunspell</code> и назвать соответствующим образом.
+</p>
+
+<p>
+Внутри MiKTeX уже есть шрифт <a href="https://ctan.org/pkg/cmbright">Computer Modern Bright</a>, нужно только добавить соответствующую директиву в org-документ.
+</p>
+</div>
+</div>
+
+<div id="outline-container-emacs" class="outline-2">
+<h2 id="emacs"><a href="#emacs">Emacs</a></h2>
+<div class="outline-text-2" id="text-emacs">
+<p>
+Настройка Emacs, которую можно добавить в <code>custom.el</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">old familiar font</span>
+(custom-set-faces
+ '(default ((t (<span style="color: #f08080;">:family</span> <span style="color: #deb887;">"Consolas"</span>
+                        <span style="color: #f08080;">:foundry</span> <span style="color: #deb887;">"outline"</span>
+                        <span style="color: #f08080;">:slant</span> normal
+                        <span style="color: #f08080;">:width</span> normal
+                        <span style="color: #f08080;">:weight</span> regular
+                        <span style="color: #f08080;">:height</span> 120)))))
+
+<span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">make `</span><span style="color: #a2cd5a;">rgrep</span><span style="color: #7f7f7f;">' work</span>
+(setq find-program
+      (expand-file-name <span style="color: #deb887;">"bin/find.exe"</span>
+                        (getenv <span style="color: #deb887;">"ChocolateyInstall"</span>)))
+
+<span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">make `</span><span style="color: #a2cd5a;">hunspell</span><span style="color: #7f7f7f;">' work</span>
+(<span style="color: #00bfff;">let</span> ((base (expand-file-name <span style="color: #deb887;">"Hunspell"</span>
+                              (or (getenv <span style="color: #deb887;">"HOME"</span>) (getenv <span style="color: #deb887;">"HOMEPATH"</span>)))))
+  (setenv <span style="color: #deb887;">"DICPATH"</span> base)
+  (setenv <span style="color: #deb887;">"DICTIONARY"</span> <span style="color: #deb887;">"en_US"</span>)
+  (setq ispell-hunspell-dict-paths-alist
+        `((<span style="color: #deb887;">"en_US"</span> ,(expand-file-name <span style="color: #deb887;">"en_US.aff"</span> base))
+          (<span style="color: #deb887;">"ru_RU"</span> ,(expand-file-name <span style="color: #deb887;">"ru_RU.aff"</span> base)))))
+
+<span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Brave to open URLs</span>
+(setq
+ browse-url-chrome-program
+ (expand-file-name
+  <span style="color: #deb887;">"brave.exe"</span>
+  <span style="color: #deb887;">"C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application"</span>))
+</pre>
+</div>
+
+<p>
+Про работу с Hunspell под Windows можно почитать у Xah Lee в этом <a href="http://xahlee.info/comp/hunspell_spell_checking.html">посте</a>.
+</p>
+
+<p>
+Изменить шрифт можно через меню, если вы забыли про его существование или никогда им не пользовались:
+</p>
+<ul class="org-ul">
+<li>Options → Set Default Font &#x2026;</li>
+<li>Options → Save Options</li>
+</ul>
+
+<p>
+Самый простой шаблон для org-документа, который использует упомянутый шрифт:
+</p>
+
+<pre class="example" id="orga758106">
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper]
+#+LATEX_HEADER_EXTRA: \usepackage{cmbright}
+#+LATEX_HEADER_EXTRA: \hypersetup{colorlinks=true, urlcolor=blue}
+#+LATEX_HEADER_EXTRA: \setlength{\parindent}{0pt}
+</pre>
+</div>
+</div>
+
+<div id="outline-container-git" class="outline-2">
+<h2 id="git"><a href="#git">Git</a></h2>
+<div class="outline-text-2" id="text-git">
+<p>
+В Windows есть встроенный ssh-клиент, а Git, по умолчанию, использует свой внутренний, который может быть не доступен из консоли (расположен в директории <code>C:\Program Files\Git\usr\bin</code>, которая, по умолчанию, не добавляется в пути). Если есть необходимость, это поведение можно изменить через переменную <code>GIT_SSH</code>, подробности <a href="https://git-scm.com/book/en/v2/Git-Internals-Environment-Variables">тут</a>.
+</p>
+
+<p>
+Чтобы сгенерировать ключи посредством команды <code>ssh-keygen</code>, необходимо перейти в упомянутую директорию и выполнить:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-powershell">PS C:\Program Files\Git\usr\bin&gt; ssh-keygen.exe -f ${Env:HOME}/.ssh/id_${Env:COMPUTERNAME}
+</pre>
+</div>
+
+<p>
+Затем обновить <code>~/.ssh/config</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-conf">Host github.com
+User git
+IdentityFile ~/.ssh/id_computer-name
+</pre>
+</div>
+
+<p>
+После чего можно загрузить полученный pub-файл на GitHub, TFS и т.д.
+</p>
+
+<p>
+Для корректной работы Magit необходимо установить <a href="https://github.com/magit/ssh-agency">ssh-agency</a>, который доступен в списке пакетов MELPA. В <code>custom.el</code>, соответственно, добавляется ещё одна строчка:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #00bfff;">require</span> '<span style="color: #a2cd5a;">ssh-agency</span>)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-syncthing" class="outline-2">
+<h2 id="syncthing"><a href="#syncthing">Syncthing</a></h2>
+<div class="outline-text-2" id="text-syncthing">
+<p>
+Установка:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-powershell">PS C:\Temp&gt; choco install syncthing
+</pre>
+</div>
+
+<p>
+Варианты инструкции по автозапуску:
+</p>
+<ul class="org-ul">
+<li><a href="https://docs.syncthing.net/users/autostart.html#autostart-windows-startup">Run at user log on using the Startup folder</a></li>
+<li><a href="https://docs.syncthing.net/users/autostart.html#run-at-user-log-on-or-at-system-startup-using-task-scheduler">Run at user log on or at system startup using Task Scheduler</a></li>
+</ul>
+
+<p>
+В свойствах директории Syncthing можно настроить маску (вкладка Ignore Patterns), которая позволит не синхронизировать временные файлы Emacs:
+</p>
+
+<pre class="example" id="org076e2f4">
+*.*~
+.#*
+</pre>
+
+<p>
+В конфиг Org-mode при этом необходимо добавить включение <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Auto-Revert.html">Auto Revert Mode</a>, чтобы буфер перезагружался при изменение файла:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(add-hook 'org-mode-hook #'auto-revert-mode)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-keyboard" class="outline-2">
+<h2 id="keyboard"><a href="#keyboard">Клавиатура</a></h2>
+<div class="outline-text-2" id="text-keyboard">
+<p>
+Переназначить Caps Lock можно через утилиту <a href="https://learn.microsoft.com/en-us/windows/powertoys/keyboard-manager">PowerToys</a>.
+</p>
+
+<p>
+Обновлено <span class="timestamp-wrapper"><span class="timestamp">&lt;Пт 07 мар 2025&gt;</span></span>
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>
