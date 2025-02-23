@@ -10,6 +10,9 @@ import bash from 'highlight.js/lib/languages/bash';
 import javascript from 'highlight.js/lib/languages/javascript';
 import json from 'highlight.js/lib/languages/json';
 import ini from 'highlight.js/lib/languages/ini';
+import lisp from 'highlight.js/lib/languages/lisp';
+import powershell from 'highlight.js/lib/languages/powershell';
+import shell from 'highlight.js/lib/languages/shell';
 
 hljs.registerLanguage('java', java);
 hljs.registerLanguage('kotlin', kotlin);
@@ -18,6 +21,10 @@ hljs.registerLanguage('bash', bash);
 hljs.registerLanguage('javascript', javascript);
 hljs.registerLanguage('json', json);
 hljs.registerLanguage('ini', ini);
+hljs.registerLanguage('conf', ini);
+hljs.registerLanguage('lisp', lisp);
+hljs.registerLanguage('powershell', powershell);
+hljs.registerLanguage('shell', shell);
 
 hljs.configure({ languageDetectRe: /\bsrc?-([\w-]+)\b/ });
 
