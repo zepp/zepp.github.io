@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru" xml:lang="ru">
+<head>
+<!-- 2025-05-10 Сб 14:07 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Использование Emacs под Windows</title>
+<meta name="author" content="Павел Соколов" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="dist/article.css"/>
+<script src="dist/bundle.js"></script>
+<meta property="og:type" content="article" />
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Использование Emacs под Windows</h1>
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">&lt;Вс 23 фев 2025&gt;</span></span>, обновлено <span class="timestamp-wrapper"><span class="timestamp">&lt;Сб 10 мая 2025&gt;</span></span>
+</p>
+
+<p>
+Данная статья представляет собой инструкцию, в которой описывается установка и донастройка Emacs под Windows. Основной сценарий использования &#x2013; работа в <a href="https://orgmode.org/">Org-mode</a>: написание документации и отчётов; ведение списка задач. Как показывает опыт, проще и удобнее написать документ на своём компьютере, после чего экспортировать данные в OpenDocument и перенести на wiki. Как инструмент, который позволяет выгрузить из головы все рабочие цели и задачи, он тоже весьма неплох. Для синхронизации org-файлов, если есть такая необходимость, предполагается использовать Syncthing. Помимо этого, будет немного затронута работа с Git и настройка Magit, который позволяет удобно работать с репозиториями.
+</p>
+
+<p>
+Подразумевается, что Emacs и Org-mode уже настроены, а конфиг лежит <a href="https://github.com/zepp/.emacs.d">где-то</a> на GitHub и его надо только немного адаптировать для Windows. В этом конфиге, помимо всего прочего, должен быть подключен репозиторий MELPA.
+</p>
+
+<div id="outline-container-environment" class="outline-2">
+<h2 id="environment"><a href="#environment">Окружение</a></h2>
+<div class="outline-text-2" id="text-environment">
+<p>
+В качестве домашней директории предполагается использовать просто директорию в корне диска, путь к которой необходимо прописать в переменную окружения <code>HOME</code>. Вероятно, можно использовать директорию, которая указана в переменной <code>HOMEPATH</code>, но этот сценарий полностью не проверялся.
+</p>
+</div>
+</div>
+
+<div id="outline-container-choco" class="outline-2">
+<h2 id="choco"><a href="#choco">Chocolatey</a></h2>
+<div class="outline-text-2" id="text-choco">
+<p>
+Первым делом необходимо установить <a href="https://chocolatey.org/install">choco</a>: скачать скрипт, изменить политику выполнения по умолчанию и запустить сам скрипт.
+</p>
+
+<p>
+Описание требуемой политики с сайта Microsoft (для домашних компьютеров политика по умолчанию &#x2013; <code>Restricted</code>):
+</p>
+
+<blockquote>
+<ul class="org-ul">
+<li>Scripts can run.</li>
+<li>Requires that all scripts and configuration files be signed by a trusted publisher, including scripts that you write on the local computer.</li>
+<li>Prompts you before running scripts from publishers that you haven't yet classified as trusted or untrusted.</li>
+<li>Risks running signed, but malicious, scripts.</li>
+</ul>
+</blockquote>
+
+<p>
+Изменить политику через PowerShell и запустить установочный скрипт (всё это надо делать с правами администратора):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-powershell">PS C:\Temp&gt; Set-ExecutionPolicy AllSigned
+
+Изменение политики выполнения
+Политика выполнения защищает компьютер от ненадежных сценариев. Изменение политики выполнения может поставить под угрозу безопасность системы, как описано в разделе справки, вызываемом командой about_Execution_Policies и расположенном по адресу https:/go.microsoft.com/fwlink/?LinkID=135170 . Вы хотите изменить политику выполнения?
+[Y] Да - Y  [A] Да для всех - A  [N] Нет - N  [L] Нет для всех - L  [S] Приостановить - S  [?] Справка
+(значением по умолчанию является "N"):Y
+PS C:\Temp&gt; .\install.ps1
+</pre>
+</div>
+
+<p>
+После установить необходимые программы следующим образом:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-powershell">PS C:\Temp&gt; choco install git emacs findutils grep ag hunspell.portable zip unzip miktex strawberryperl powertoys
+</pre>
+</div>
+
+<p>
+Пояснение:
+</p>
+<ul class="org-ul">
+<li><code>findutils</code>, <code>grep</code> &#x2013; привычные утилиты, без которых не будет работать рекурсивный поиск в директории по содержимому, то есть команда <code>rgrep</code>;</li>
+<li><code>ag</code> &#x2013; отличная замена <code>rgrep</code>, которая настраивается в три строчки (см. <a href="https://github.com/ggreer/the_silver_searcher">The Silver Searcher</a>);</li>
+<li><code>zip</code>, <code>unzip</code> &#x2013; необходимые утилиты, без которых не будет работать экспорт в OpenDocument Text;</li>
+<li><code>miktex</code>, <code>strawberryperl</code> &#x2013; необходимые пакеты, без которых не будет работать экспорт в PDF;</li>
+<li><code>powertoys</code> &#x2013; утилита от Microsoft, которая, в том числе, позволяет переназначать клавиши или сочетания клавиш.</li>
+</ul>
+
+<p>
+В дальнейшем, чтобы обновить все установленные пакеты разом, можно использовать команду:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-powershell">PS C:\Temp&gt; choco upgrade all
+Chocolatey v2.4.2
+Upgrading the following packages:
+all
+</pre>
+</div>
+
+<p>
+Словари для Hunspell можно взять <a href="https://github.com/wooorm/dictionaries">тут</a>. Файлы <code>index.dic</code> и <code>index.aff</code> необходимо скопировать в директорию <code>~/.dicts</code> и назвать соответствующим образом (для русского языка эти файлы будут называться, соответственно, <code>ru_RU.dic</code> и <code>ru_RU.aff</code>).
+</p>
+
+<p>
+Внутри MiKTeX уже есть, вероятно, знакомы вам шрифты:
+</p>
+<ul class="org-ul">
+<li><a href="https://tug.org/FontCatalogue/comfortaa/">Comfortaa</a> &#x2013; подойдёт для написания отчётов, хотя не выглядит достаточно формальным;</li>
+<li><a href="https://tug.org/FontCatalogue/computermodernbright/">Computer Modern Bright</a> &#x2013; подойдёт для написания технических заметок, где есть формулы и тому подобное.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-emacs" class="outline-2">
+<h2 id="emacs"><a href="#emacs">Emacs</a></h2>
+<div class="outline-text-2" id="text-emacs">
+<p>
+Для запуска Emacs следует использовать команду <code>runemacs.exe</code>. При желании, можно настроить запуск в режиме сервера, для этого необходимо:
+</p>
+<ul class="org-ul">
+<li>перейти в директорию <code>C:\ProgramData\chocolatey\bin</code>, где находится <code>runemacs.exe</code>;</li>
+<li>создать ярлык;</li>
+<li>открыть свойства ярлыка и добавить аргумент <code>--daemon</code>;</li>
+<li>переместить ярлык в директорию <code>shell:startup</code>;</li>
+<li>для запуска клиентской сессии использовать <code>emacsclientw.exe</code>.</li>
+</ul>
+
+<p>
+Настройка Emacs, которую можно добавить в <code>custom.el</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(defun hunspell-list-dicts(directory)
+  "builds dictionary path alist for hunspell"
+
+  (let ((root (expand-file-name directory)))
+    (mapcar #'(lambda(file)
+                (list (substring file 0 -4)
+                      (expand-file-name file root)))
+            (directory-files
+             root
+             nil
+             "[[:lower:]]\\{2\\}_[[:upper:]]\\{2\\}\\.dic"))))
+
+(defun fix-find-regexp (list)
+  (mapcar #'(lambda(entry)
+              (if (string-match "\\^find" (car entry))
+                  (list (string-replace "^find" "find\\.exe" (car entry))
+                        (cadr entry))
+                  entry))
+          list))
+
+(setq
+ ;; make `rgrep' work
+ find-program
+ (expand-file-name "bin/find.exe"
+                   (getenv "ChocolateyInstall")))
+
+(with-eval-after-load 'grep
+  (setq grep-mode-font-lock-keywords
+        (fix-find-regexp grep-mode-font-lock-keywords)))
+
+;; make `hunspell' work
+(let ((root (expand-file-name ".dicts"
+                              (or (getenv "HOME")
+                                  (getenv "HOMEPATH")))))
+  (setenv "DICPATH" root)
+  (setenv "DICTIONARY" "en_US")
+  (setq ispell-hunspell-dict-paths-alist (hunspell-list-dicts root)))
+</pre>
+</div>
+
+<p>
+Про работу с Hunspell под Windows можно почитать у Xah Lee в статье <a href="http://xahlee.info/comp/hunspell_spell_checking.html">Hunspell Tutorial</a>. Автор статьи, помимо всего прочего, обращает внимание на то, что порт Hunspell для Windows содержит ошибку (можно убедиться, если выполнить команду <code>hunspell -D</code> из консоли), которая заключается в том, что переменные окружения (имеются в виду <code>DICPATH</code> и <code>DICTIONARY</code>) не работают. Выше приведена функция <code>hunspell-list-dicts</code>, которая позволяет обойти эту проблему.
+</p>
+
+<p>
+Для того, чтобы полноценно заработала команда <code>rgrep</code>, необходимо указать полный путь до утилиты <code>find</code>, иначе будет запускаться встроенная в Windows утилита, которая не совместима с версией из пакета GNU Find Utilities. Помимо этого, необходимо подправить регулярку, которая используется, если включена опция <code>grep-find-abbreviate</code> (она включена по умолчанию), которая скрывает часть команды в буфере <code>compile</code>, чтобы не захламлять его лишней информацией.
+</p>
+
+<p>
+Альтернативный вариант, который позволит не тратить время впустую, &#x2013; использовать для поиска <code>ag</code> (The Silver Searcher):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(use-package ag
+    :bind ("C-c g" . ag-regexp)
+    :defer t
+    :ensure t)
+</pre>
+</div>
+
+<p>
+Более подробно про доступные команды можно прочитать в краткой справке <a href="https://agel.readthedocs.io/en/latest/usage.html">ag.el – Usage</a>.
+</p>
+
+<p>
+Изменить шрифт можно через меню, если вы забыли про его существование или никогда им не пользовались:
+</p>
+<ul class="org-ul">
+<li>Options → Set Default Font &#x2026;</li>
+<li>Options → Save Options</li>
+</ul>
+
+<p>
+Самый простой шаблон для org-документа, который использует один из упомянутых шрифтов:
+</p>
+
+<pre class="example" id="org9d1539a">
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper]
+#+LATEX_HEADER_EXTRA: \usepackage{cmbright}
+#+LATEX_HEADER_EXTRA: \hypersetup{colorlinks=true, urlcolor=blue}
+#+LATEX_HEADER_EXTRA: \setlength{\parindent}{0pt}
+</pre>
+</div>
+</div>
+
+<div id="outline-container-git" class="outline-2">
+<h2 id="git"><a href="#git">Git</a></h2>
+<div class="outline-text-2" id="text-git">
+<p>
+В Windows есть встроенный ssh-клиент, а Git, по умолчанию, использует свой внутренний, который может быть не доступен из консоли (расположен в директории <code>C:\Program Files\Git\usr\bin</code>, которая, по умолчанию, не добавляется в пути). Если есть необходимость, это поведение можно изменить через переменную <code>GIT_SSH</code>, подробности <a href="https://git-scm.com/book/en/v2/Git-Internals-Environment-Variables">тут</a>.
+</p>
+
+<p>
+Чтобы сгенерировать ключи посредством команды <code>ssh-keygen</code>, необходимо перейти в упомянутую директорию и выполнить:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-powershell">PS C:\Program Files\Git\usr\bin&gt; ssh-keygen.exe -f ${Env:HOME}/.ssh/id_${Env:COMPUTERNAME}
+</pre>
+</div>
+
+<p>
+Затем обновить <code>~/.ssh/config</code> (GitHub используется просто для примера):
+</p>
+
+<pre class="example" id="orgee5a63b">
+Host github.com
+User git
+IdentityFile ~/.ssh/id_computer-name
+</pre>
+
+<p>
+После чего можно загрузить полученный pub-файл на GitHub, TFS и т.д.
+</p>
+
+<p>
+Для корректной работы Magit необходимо установить <a href="https://github.com/magit/ssh-agency">ssh-agency</a>, который доступен в списке пакетов MELPA:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(use-package ssh-agency
+    :demand t
+    :ensure t)
+</pre>
+</div>
+
+<p>
+Данный пакет необходим по ряду причин:
+</p>
+<ul class="org-ul">
+<li>как уже упоминалось, ssh-клиент и сопутствующие утилиты расположены в нестандартном месте;</li>
+<li>без <code>ssh-agent</code> придётся вводить пароль от ключа на каждый push, а возможно и pull.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-syncthing" class="outline-2">
+<h2 id="syncthing"><a href="#syncthing">Syncthing</a></h2>
+<div class="outline-text-2" id="text-syncthing">
+<p>
+Установка:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-powershell">PS C:\Temp&gt; choco install syncthing
+</pre>
+</div>
+
+<p>
+Варианты инструкции по автозапуску:
+</p>
+<ul class="org-ul">
+<li><a href="https://docs.syncthing.net/users/autostart.html#autostart-windows-startup">Run at user log on using the Startup folder</a></li>
+<li><a href="https://docs.syncthing.net/users/autostart.html#run-at-user-log-on-or-at-system-startup-using-task-scheduler">Run at user log on or at system startup using Task Scheduler</a></li>
+</ul>
+
+<p>
+На сайте Chocolatey, в описание пакета, приводится следующий способ автозапуска:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-powershell">New-Service Syncthing $env:ChocolateyInstall/bin/syncthing.exe -StartupType Automatic
+Start-Service Syncthing
+</pre>
+</div>
+
+<p>
+Этот способ работает плохо: сервис запускается с ошибкой и его, к тому же, потом не удалить. По идее, это можно сделать при помощи команды <code>sc delete Syncthing</code>, но даже после перезагрузки, сервис никуда не исчезает. Данный способ исследовался на Windows 10 Home и претензия может быть уже неактуальной.
+</p>
+
+<p>
+В свойствах директории Syncthing можно настроить маску (вкладка Ignore Patterns), которая позволит не синхронизировать временные файлы Emacs:
+</p>
+
+<pre class="example" id="org7e0cc0c">
+*.*~
+.#*
+</pre>
+
+<p>
+В конфиг Org-mode при этом необходимо добавить включение <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Auto-Revert.html">Auto Revert Mode</a>, чтобы буфер перезагружался при изменение файла:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(add-hook 'org-mode-hook #'auto-revert-mode)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-keyboard" class="outline-2">
+<h2 id="keyboard"><a href="#keyboard">Клавиатура</a></h2>
+<div class="outline-text-2" id="text-keyboard">
+<p>
+Переназначить Caps Lock можно через уже упомянутую утилиту <a href="https://learn.microsoft.com/en-us/windows/powertoys/keyboard-manager">PowerToys</a>.
+</p>
+
+<p>
+Сначала отключаем лишние функции, чтобы оставить привычное поведение системы, и включаем полезные, на мой вкус:
+</p>
+<ul class="org-ul">
+<li>отключаем System Tools → Advanced Past;</li>
+<li>отключаем System Tools → Color Picker;</li>
+<li>включаем System Tools → PowerToys Run &#x2013; приятная замена Win+R;</li>
+<li>отключаем System Tools → Screen Ruler;</li>
+<li>отключаем Windows  &amp; Layouts → FancyZones &#x2013; интересная штука, но лучше поразбираться с ней потом;</li>
+<li>включаем Input/Output → Keyboard Manager &#x2013; самое <b>необходимое</b> из этого всего, чтобы переназначить Caps Lock;</li>
+<li>отключаем Input/Output → Mouse Utilities.</li>
+</ul>
+
+<p>
+Как переназначить Caps Lock:
+</p>
+<ul class="org-ul">
+<li>переходим в Input/Output → Keyboard Manager;</li>
+<li>выбираем Remap key;</li>
+<li>выбираем слева Caps Lock, а справа, соответственно, Control.</li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>
