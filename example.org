@@ -2,7 +2,7 @@
 
 * Article title
 
-[2024-06-23 Вс]
+[2025-03-21 Пт]
 
 Text text text text text text text. Text *bold bold* text text text text text. Text text text /italic italic/ text text. Text text text text +strike through+ text text. Text _underline underline_ text text text text text. Text =3429e299-ff7e-4861-974c-3cc3f4ea0054= text text text text text text. Text text text text [2024-06-23 Вс] text text text. Text text text text [[https://www.google.com/][hyperlink]] text text.
 
@@ -62,7 +62,7 @@ Text text text text text text text text. Text text text text text text text text
 
 Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text.
 
-#+begin_example
+#+begin_src conf
 ; comment declared
 ; sections defined with multiple values
 [Section-name]
@@ -71,7 +71,7 @@ key=value
 ; sections defined with multiple values
 option1=true # in-line comments
 option1=false
-#+end_example
+#+end_src
 
 ** Tables
 :PROPERTIES:
