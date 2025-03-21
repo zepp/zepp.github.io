@@ -1,8 +1,9 @@
 #+LANGUAGE: en
+#+TITLE: Article title
 
-* Article title
+* Heading
 
-[2024-06-23 Вс]
+[2025-03-21 Пт]
 
 Text text text text text text text. Text *bold bold* text text text text text. Text text text /italic italic/ text text. Text text text text +strike through+ text text. Text _underline underline_ text text text text text. Text =3429e299-ff7e-4861-974c-3cc3f4ea0054= text text text text text text. Text text text text [2024-06-23 Вс] text text text. Text text text text [[https://www.google.com/][hyperlink]] text text.
 
@@ -24,7 +25,7 @@ Text text text text text text. Text text text text text text. Text text text tex
 + unordered list item text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text
 
 Text text text text text text. Text text text text text text. Text text text text text text:
-1. ordered list item  text text text text text text text text text =text text= text text text text text text text text text text text text text
+1. ordered list item text text text text text text text text text text text text text text text text text text text text text text
 2. ordered list item
 3. ordered list item
 
@@ -46,10 +47,17 @@ verse verse verse,
 verse verse verse,
 verse verse,
 verse verse verse
+
 Author Author
 #+end_verse
 
 Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text.
+
+#+begin_center
+Centered centered centered centered centered.
+#+end_center
+
+Text text text text text text text text. Text text text text text text text text. Text text text text text text text text.
 
 #+begin_src json
 {
@@ -62,7 +70,7 @@ Text text text text text text text text. Text text text text text text text text
 
 Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text.
 
-#+begin_example
+#+begin_src conf
 ; comment declared
 ; sections defined with multiple values
 [Section-name]
@@ -71,6 +79,15 @@ key=value
 ; sections defined with multiple values
 option1=true # in-line comments
 option1=false
+#+end_src
+
+Text text text text text text text. Text text text text text. Text text text text. Text text text text text text text text. Text text text text text text. Text text text text text text.
+
+#+begin_example
+preformatted text that is not highlighted
+preformatted text that is not highlighted
+preformatted text that is not highlighted
+preformatted text that is not highlighted
 #+end_example
 
 ** Tables
@@ -80,36 +97,25 @@ option1=false
 
 Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text.
 
-| Column 1         | Column 2                                                                                         |
-|------------------+--------------------------------------------------------------------------------------------------|
-| Text             | description description description description =020b7d32-d430-4d49-9c56-203123f90de9=           |
-| Text             | description description description                                                              |
-| Text text        | description description description description description  description description description |
-| =code code code= | text                                                                                             |
-|------------------+--------------------------------------------------------------------------------------------------|
+#+CAPTION: Terms description
+| Column 1  | Column 2                                                                                         |
+|-----------+--------------------------------------------------------------------------------------------------|
+| Term      | description description description description                                                  |
+| Term      | description description description                                                              |
+| Term term | description description description description description  description description description |
+|-----------+--------------------------------------------------------------------------------------------------|
 
 Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text.
 
-| One | Two | Three |
-|-----+-----+-------|
-| one |   2 |     3 |
-| one |   2 |     3 |
-| one |   2 |     3 |
-| one |   2 |     3 |
+#+CAPTION: Numbers array
+| One    | Two | Three | Four |
+|--------+-----+-------+------|
+| first  |   2 |     3 |    4 |
+| second |   2 |     3 |    4 |
+| third  |   2 |     3 |    4 |
+| fourth |   2 |     3 |    4 |
 
 Text text text.
-
-** Headlines
-:PROPERTIES:
-:CUSTOM_ID: headlines
-:END:
-*** Headline 3
-
-Text text text text text text. Text text text text text text. Text text text text text. Text text text text text text. Text text text text text text. Text text text text.
-
-*** Headline 3
-
-Text text text text text text text text. Text text text text. Text text text text text text. Text text text text. Text text text text text text text. Text text text text. Text text text text text text text text. Text text text text.
 
 ** Images
 :PROPERTIES:
@@ -124,7 +130,7 @@ Text text text text text text. Text text text text text. Text text text text tex
 
 Text text text text. Text text text text. Text text text text.
 
-** Final chapter
+* Final
 :PROPERTIES:
 :CUSTOM_ID: final
 :END:
