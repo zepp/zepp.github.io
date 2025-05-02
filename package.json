@@ -1,8 +1,8 @@
 {
-  "name": "blog.zeppa.xyz",
+  "name": "pages.zeppa.xyz",
   "version": "1.0.0",
-  "description": "Personal Blog",
-  "main": "src/org-highlight.ts",
+  "description": "My articles and notes",
+  "main": "src/org-helper.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
