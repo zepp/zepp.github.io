@@ -161,9 +161,11 @@ div.figure {
     align-items: center;
 }
 
-.org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
-.org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
-.org-center { margin-left: auto; margin-right: auto; text-align: center; }
+div.org {
+    &-center { margin-left: auto; margin-right: auto; text-align: center; }
+    &-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+    &-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+}
 
 body {
     font-family: sans-serif;
