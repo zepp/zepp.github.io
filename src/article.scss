@@ -9,6 +9,11 @@ $block-border-radius: 2px;
     font-style: normal;
 }
 
+@mixin h-center-block {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 h1 {
     text-align: center;
     text-transform: uppercase;
@@ -93,8 +98,7 @@ p.verse {
     overflow: auto;
     width: min-content;
     line-height: inherit;
-    margin-left: auto;
-    margin-right: auto;
+    @include h-center-block;
 }
 
 ul, ol {
@@ -118,8 +122,7 @@ ul {
 table {
     margin-top: 16px;
     border-collapse:collapse;
-    margin-left: auto;
-    margin-right: auto;
+    @include h-center-block;
 
     th { color: $text-secondary; }
 
@@ -162,7 +165,7 @@ div.figure {
 }
 
 div.org {
-    &-center { margin-left: auto; margin-right: auto; text-align: center; }
+    &-center { @include h-center-block; text-align: center; }
     &-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
     &-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
 }
