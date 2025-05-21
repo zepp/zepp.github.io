@@ -53,6 +53,12 @@ Author Author
 
 Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text. Text text text text text text text text.
 
+#+begin_center
+Centered centered centered centered centered.
+#+end_center
+
+Text text text text text text text text. Text text text text text text text text. Text text text text text text text text.
+
 #+begin_src json
 {
   "property1": 117312,
@@ -91,22 +97,23 @@ preformatted text that is not highlighted
 
 Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text.
 
-| Column 1         | Column 2                                                                                         |
-|------------------+--------------------------------------------------------------------------------------------------|
-| Text             | description description description description =020b7d32-d430-4d49-9c56-203123f90de9=           |
-| Text             | description description description                                                              |
-| Text text        | description description description description description  description description description |
-| =code code code= | text                                                                                             |
-|------------------+--------------------------------------------------------------------------------------------------|
+#+CAPTION: Terms description
+| Column 1  | Column 2                                                                                         |
+|-----------+--------------------------------------------------------------------------------------------------|
+| Term      | description description description description                                                  |
+| Term      | description description description                                                              |
+| Term term | description description description description description  description description description |
+|-----------+--------------------------------------------------------------------------------------------------|
 
 Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text. Text text text text text.
 
-| One | Two | Three |
-|-----+-----+-------|
-| one |   2 |     3 |
-| one |   2 |     3 |
-| one |   2 |     3 |
-| one |   2 |     3 |
+#+CAPTION: Numbers array
+| One    | Two | Three | Four |
+|--------+-----+-------+------|
+| first  |   2 |     3 |    4 |
+| second |   2 |     3 |    4 |
+| third  |   2 |     3 |    4 |
+| fourth |   2 |     3 |    4 |
 
 Text text text.
 
