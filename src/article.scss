@@ -141,8 +141,14 @@ table {
     }
 
     caption.t {
-        &-above { caption-side: top; }
-        &-bottom { caption-side: bottom; }
+        &-above {
+            caption-side: top;
+            margin-bottom: 8px;
+        }
+        &-bottom {
+            caption-side: bottom;
+            margin-top: 8px;
+        }
     }
 }
 
@@ -158,16 +164,10 @@ span.underline {
     text-decoration: underline;
 }
 
-div.figure {
+div.figure, div.org-center {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-div.org {
-    &-center { @include h-center-block; text-align: center; }
-    &-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
-    &-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
 }
 
 body {
