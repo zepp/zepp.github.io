@@ -172,6 +172,16 @@ div.figure, div.org-center {
     align-items: center;
 }
 
+#postamble {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 8px;
+    align-items: left;
+    border-width: 2px 0 0 0;
+    border-style: solid;
+    border-color: black;
+}
+
 body {
     font-family: sans-serif;
     font-size: 14pt;
