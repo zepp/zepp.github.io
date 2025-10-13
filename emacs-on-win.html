@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ru" xml:lang="ru">
 <head>
-<!-- 2025-09-22 Пн 10:44 -->
+<!-- 2025-10-13 пн 20:19 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Установка Emacs на Windows</title>
@@ -16,7 +16,7 @@
 <div id="content" class="content">
 <h1 class="title">Установка Emacs на Windows</h1>
 <p>
-<span class="timestamp-wrapper"><span class="timestamp">&lt;Вс 23 фев 2025&gt;</span></span>, обновлено <span class="timestamp-wrapper"><span class="timestamp">&lt;Пн 22 сен 2025&gt;</span></span>
+<span class="timestamp-wrapper"><span class="timestamp">&lt;вс 23 фев 2025&gt;</span></span>, обновлено <span class="timestamp-wrapper"><span class="timestamp">&lt;пн 22 сен 2025&gt;</span></span>
 </p>
 
 <p>
@@ -35,7 +35,6 @@
 <p>
 Подразумевается, что Emacs и Org-mode уже настроены, а конфиг лежит <a href="https://github.com/zepp/.emacs.d">где-то</a> на GitHub и его надо только немного адаптировать для Windows. В этом конфиге, помимо всего прочего, должен быть подключен репозиторий MELPA.
 </p>
-
 <div id="outline-container-environment" class="outline-2">
 <h2 id="environment"><a href="#environment">Окружение</a></h2>
 <div class="outline-text-2" id="text-environment">
@@ -44,7 +43,6 @@
 </p>
 </div>
 </div>
-
 <div id="outline-container-choco" class="outline-2">
 <h2 id="choco"><a href="#choco">Chocolatey</a></h2>
 <div class="outline-text-2" id="text-choco">
@@ -60,7 +58,7 @@
 <ul class="org-ul">
 <li>Scripts can run.</li>
 <li>Requires that all scripts and configuration files be signed by a trusted publisher, including scripts that you write on the local computer.</li>
-<li>Prompts you before running scripts from publishers that you haven't yet classified as trusted or untrusted.</li>
+<li>Prompts you before running scripts from publishers that you haven&#39;t yet classified as trusted or untrusted.</li>
 <li>Risks running signed, but malicious, scripts.</li>
 </ul>
 </blockquote>
@@ -85,7 +83,7 @@ PS C:\Temp&gt; .\install.ps1
 </p>
 
 <div class="org-src-container">
-<pre class="src src-powershell">PS C:\Temp&gt; choco install git emacs diffutils findutils grep ag hunspell.portable zip unzip miktex strawberryperl powertoys
+<pre class="src src-powershell">PS C:\Temp&gt; choco install git emacs diffutils findutils grep ag hunspell.portable zip unzip guidgen-console miktex strawberryperl powertoys
 </pre>
 </div>
 
@@ -97,6 +95,7 @@ PS C:\Temp&gt; .\install.ps1
 <li><code>findutils</code>, <code>grep</code> &#x2014; утилиты, без которых не будет работать рекурсивный поиск по содержимому директории, то есть команда <code>rgrep</code>;</li>
 <li><code>ag</code> &#x2014; отличная замена <code>rgrep</code> для некоторых сценариев, которая настраивается в три строчки (см. <a href="https://github.com/ggreer/the_silver_searcher">The Silver Searcher</a>);</li>
 <li><code>zip</code>, <code>unzip</code> &#x2014; необходимые утилиты, без которых не будет работать экспорт в OpenDocument Text;</li>
+<li><code>guidgen-console</code> &#x2013; легковесная утилита для генерации UUID из командной строки (пригодится, если предполагается синхронизировать директорию с заметками);</li>
 <li><code>miktex</code>, <code>strawberryperl</code> &#x2014; необходимые пакеты, без которых не будет работать экспорт в PDF;</li>
 <li><code>powertoys</code> &#x2014; утилита от Microsoft, которая, в том числе, позволяет переназначать клавиши или сочетания клавиш.</li>
 </ul>
@@ -118,7 +117,6 @@ all
 </p>
 </div>
 </div>
-
 <div id="outline-container-emacs" class="outline-2">
 <h2 id="emacs"><a href="#emacs">Emacs</a></h2>
 <div class="outline-text-2" id="text-emacs">
@@ -203,7 +201,6 @@ all
 </p>
 </div>
 </div>
-
 <div id="outline-container-org-mode" class="outline-2">
 <h2 id="org-mode"><a href="#org-mode">Org-mode</a></h2>
 <div class="outline-text-2" id="text-org-mode">
@@ -219,7 +216,7 @@ all
 Самый простой шаблон для org-документа, который использует один из упомянутых шрифтов:
 </p>
 
-<pre class="example" id="org27c02d7">
+<pre class="example" id="org1caaaec">
 #+LATEX_CLASS: article
 #+LATEX_CLASS_OPTIONS: [a4paper]
 #+LATEX_HEADER_EXTRA: \usepackage{cmbright}
@@ -228,16 +225,29 @@ all
 </pre>
 
 <p>
-В конфиг Org-mode желательно добавить включение <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Auto-Revert.html">Auto Revert Mode</a>, чтобы буфер перезагружался при изменение файла (если планируется использовать <a href="#syncthing">Syncthing</a>):
+Если планируется использовать <a href="#syncthing">Syncthing</a>, то крайне желательно добавить в конфиг Org-mode:
 </p>
+<ul class="org-ul">
+<li>включение <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Auto-Revert.html">Auto Revert Mode</a>, чтобы буфер перезагружался при изменение файла;</li>
+<li>генерацию ID заметки при помощи <code>GuidgenConsole</code> в <i>верхнем</i> регистре.</li>
+</ul>
 
 <div class="org-src-container">
 <pre class="src src-lisp">(add-hook 'org-mode-hook #'auto-revert-mode)
+
+(setq org-id-uuid-program
+      (cond ((string= system-type "gnu/linux")
+             "uuidgen | awk '{print toupper($0)}'")
+            ((string= system-type "windows-nt") "guidgen /u")
+            (t "uuidgen")))
 </pre>
 </div>
-</div>
-</div>
 
+<p>
+Исторически так сложилось, что файловая система в Linux различает регистр букв в пути и имени файла, а на Windows и macOS нет. Чтобы избежать проблем с синхронизацией вложений, которые были добавлены к заметке, необходимо, чтобы <code>UUID</code> на всех платформах генерировался в одном и том же регистре.
+</p>
+</div>
+</div>
 <div id="outline-container-git" class="outline-2">
 <h2 id="git"><a href="#git">Git</a></h2>
 <div class="outline-text-2" id="text-git">
@@ -258,7 +268,7 @@ all
 Затем обновить <code>~/.ssh/config</code> (GitHub используется просто для примера):
 </p>
 
-<pre class="example" id="orgb98fe8d">
+<pre class="example" id="org3d17c65">
 Host github.com
 User git
 IdentityFile ~/.ssh/id_computer-name
@@ -288,7 +298,6 @@ IdentityFile ~/.ssh/id_computer-name
 </ul>
 </div>
 </div>
-
 <div id="outline-container-syncthing" class="outline-2">
 <h2 id="syncthing"><a href="#syncthing">Syncthing</a></h2>
 <div class="outline-text-2" id="text-syncthing">
@@ -327,13 +336,12 @@ Start-Service Syncthing
 В свойствах директории Syncthing можно настроить маску (вкладка Ignore Patterns), которая позволит не синхронизировать временные файлы Emacs:
 </p>
 
-<pre class="example" id="org792fa43">
+<pre class="example" id="org4c297b4">
 *.*~
 .#*
 </pre>
 </div>
 </div>
-
 <div id="outline-container-keyboard" class="outline-2">
 <h2 id="keyboard"><a href="#keyboard">Клавиатура</a></h2>
 <div class="outline-text-2" id="text-keyboard">
@@ -366,7 +374,7 @@ Start-Service Syncthing
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="author">Павел Соколов</p><p class="timestamp">2025-09-22 Пн 10:44</p>
+<p class="author">Павел Соколов</p><p class="timestamp">2025-10-13 пн 20:19</p>
 </div>
 </body>
 </html>
